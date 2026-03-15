@@ -882,6 +882,28 @@
             font-weight: 700;
         }
 
+        .formula-figure {
+            width: fit-content;
+            max-width: min(100%, 28rem);
+            padding: clamp(0.9rem, 1.2vw, 1.1rem) clamp(1rem, 1.5vw, 1.3rem);
+            border-radius: clamp(1rem, 1.4vw, 1.25rem);
+            background:
+                linear-gradient(180deg, rgba(255, 255, 255, 0.07), rgba(255, 255, 255, 0.025)),
+                rgba(126, 224, 209, 0.08);
+            border: 1px solid rgba(126, 224, 209, 0.26);
+            box-shadow: 0 1rem 2.4rem rgba(0, 0, 0, 0.24);
+        }
+
+        .formula-figure img {
+            display: block;
+            width: 100%;
+            height: auto;
+            max-width: min(100%, 24rem);
+            max-height: none;
+            border-radius: 0.35rem;
+            background: rgba(255, 255, 255, 0.96);
+        }
+
         .hero-quote {
             font-family: var(--font-display);
             font-size: clamp(1.65rem, 3.8vw, 3.1rem);
@@ -1244,7 +1266,9 @@
                 <div class="process-card reveal-left">
                     <div class="eyebrow accent-sa">Acceptance of Worse Solutions</div>
                     <h2 class="section-title">Better moves are always accepted. Worse moves are accepted with a probability.</h2>
-                    <div class="formula-chip">P = e^(ΔE / T)</div>
+                    <div class="formula-figure">
+                        <img src="assets/acceptance-formula.png" alt="Acceptance probability formula for simulated annealing">
+                    </div>
                     <ul class="bullet-list">
                         <li><strong>f(s')</strong> measures the new state.</li>
                         <li><strong>f(s)</strong> measures the current state.</li>
