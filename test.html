@@ -904,6 +904,166 @@
             background: rgba(255, 255, 255, 0.96);
         }
 
+        .metallurgy-slide .frame {
+            gap: clamp(0.95rem, 2vw, 1.6rem);
+        }
+
+        .anneal-diagram {
+            display: grid;
+            grid-template-columns: minmax(0, 1.05fr) auto minmax(0, 1.05fr) auto minmax(0, 1.05fr) auto minmax(0, 1.05fr);
+            gap: clamp(0.65rem, 1vw, 0.9rem);
+            align-items: center;
+        }
+
+        .anneal-stage {
+            position: relative;
+            min-height: clamp(19rem, 42vh, 24rem);
+            padding: clamp(1rem, 1.6vw, 1.25rem);
+            display: grid;
+            grid-template-rows: auto auto 1fr;
+            gap: clamp(0.55rem, 0.9vw, 0.8rem);
+            border-radius: clamp(1rem, 1.6vw, 1.4rem);
+            background:
+                linear-gradient(180deg, rgba(255, 255, 255, 0.07), rgba(255, 255, 255, 0.025)),
+                rgba(11, 23, 42, 0.9);
+            border: 1px solid rgba(255, 255, 255, 0.13);
+            box-shadow: 0 1.6rem 3.6rem rgba(0, 0, 0, 0.28);
+            overflow: hidden;
+        }
+
+        .anneal-stage::before {
+            content: "";
+            position: absolute;
+            inset: 0;
+            pointer-events: none;
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.08), transparent 42%);
+        }
+
+        .anneal-stage-num {
+            width: clamp(2rem, 2.4vw, 2.35rem);
+            height: clamp(2rem, 2.4vw, 2.35rem);
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 999px;
+            background: rgba(126, 224, 209, 0.12);
+            border: 1px solid rgba(126, 224, 209, 0.28);
+            color: var(--sa);
+            font-weight: 800;
+            font-size: clamp(0.9rem, 1.15vw, 1rem);
+        }
+
+        .anneal-stage h2 {
+            font-family: var(--font-display);
+            font-size: clamp(1.8rem, 3.7vw, 3.3rem);
+            line-height: 0.95;
+            color: var(--sa);
+        }
+
+        .anneal-stage p {
+            color: var(--text-secondary);
+            font-size: clamp(0.94rem, 1.25vw, 1.02rem);
+            line-height: 1.38;
+            max-width: 22ch;
+        }
+
+        .anneal-arrow {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: rgba(126, 224, 209, 0.5);
+            font-size: clamp(1.25rem, 2vw, 1.8rem);
+            font-weight: 700;
+        }
+
+        .particle-field {
+            position: relative;
+            min-height: clamp(8rem, 20vh, 11rem);
+            border-radius: clamp(0.9rem, 1.2vw, 1.1rem);
+            background: rgba(255, 255, 255, 0.04);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            overflow: hidden;
+        }
+
+        .particle {
+            position: absolute;
+            width: clamp(0.48rem, 0.75vw, 0.68rem);
+            height: clamp(0.48rem, 0.75vw, 0.68rem);
+            border-radius: 999px;
+            background: var(--sa);
+            box-shadow: 0 0 16px rgba(126, 224, 209, 0.45);
+        }
+
+        .particle.dim {
+            background: rgba(126, 224, 209, 0.4);
+            box-shadow: none;
+        }
+
+        .motion-line {
+            position: absolute;
+            height: 2px;
+            border-radius: 999px;
+            background: linear-gradient(90deg, rgba(126, 224, 209, 0), rgba(126, 224, 209, 0.85));
+        }
+
+        .cool-curve {
+            position: relative;
+            min-height: clamp(8rem, 20vh, 11rem);
+            border-radius: clamp(0.9rem, 1.2vw, 1.1rem);
+            background: rgba(255, 255, 255, 0.04);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            overflow: hidden;
+        }
+
+        .cool-path {
+            position: absolute;
+            left: 8%;
+            right: 10%;
+            top: 18%;
+            bottom: 18%;
+        }
+
+        .cool-path svg {
+            width: 100%;
+            height: 100%;
+        }
+
+        .cool-labels {
+            position: absolute;
+            inset: 0;
+            pointer-events: none;
+        }
+
+        .cool-label {
+            position: absolute;
+            color: var(--text-secondary);
+            font-size: var(--small-size);
+            font-weight: 700;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+        }
+
+        .ordered-grid {
+            display: grid;
+            grid-template-columns: repeat(4, minmax(0, 1fr));
+            gap: clamp(0.45rem, 0.7vw, 0.6rem);
+            align-content: center;
+            justify-items: center;
+            min-height: clamp(8rem, 20vh, 11rem);
+            padding: clamp(0.8rem, 1vw, 1rem);
+            border-radius: clamp(0.9rem, 1.2vw, 1.1rem);
+            background: rgba(255, 255, 255, 0.04);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+        }
+
+        .ordered-node {
+            width: clamp(0.8rem, 1.1vw, 1rem);
+            height: clamp(0.8rem, 1.1vw, 1rem);
+            border-radius: 999px;
+            background: var(--sa);
+            box-shadow: 0 0 18px rgba(126, 224, 209, 0.3);
+        }
+
         .hero-quote {
             font-family: var(--font-display);
             font-size: clamp(1.65rem, 3.8vw, 3.1rem);
@@ -952,7 +1112,8 @@
             .matrix,
             .hc-hero-top,
             .hc-benefits,
-            .agenda-stack {
+            .agenda-stack,
+            .anneal-diagram {
                 grid-template-columns: 1fr;
             }
 
@@ -1230,26 +1391,67 @@
         <div class="slide-content">
             <div class="frame">
                 <div class="eyebrow reveal accent-sa">Metallurgy Analogy</div>
-                <div class="grid grid-4">
-                    <article class="stat-card reveal">
-                        <div class="big-number accent-sa">Hot</div>
-                        <h3>High temperature</h3>
-                        <p class="footnote">Atoms move freely. Search explores many random directions.</p>
+                <div class="anneal-diagram">
+                    <article class="anneal-stage reveal-left">
+                        <span class="anneal-stage-num">1</span>
+                        <h2>Heat</h2>
+                        <div class="particle-field">
+                            <span class="particle" style="left: 12%; top: 18%;"></span>
+                            <span class="particle" style="left: 42%; top: 22%;"></span>
+                            <span class="particle" style="left: 68%; top: 14%;"></span>
+                            <span class="particle" style="left: 22%; top: 58%;"></span>
+                            <span class="particle" style="left: 58%; top: 48%;"></span>
+                            <span class="particle" style="left: 78%; top: 66%;"></span>
+                            <span class="motion-line" style="left: 8%; top: 30%; width: 22%; transform: rotate(18deg);"></span>
+                            <span class="motion-line" style="left: 38%; top: 56%; width: 24%; transform: rotate(-14deg);"></span>
+                            <span class="motion-line" style="left: 52%; top: 22%; width: 18%; transform: rotate(26deg);"></span>
+                        </div>
+                        <p>At high temperature, particles move freely and the search explores many random directions.</p>
                     </article>
-                    <article class="stat-card reveal delay-1">
-                        <div class="big-number accent-sa">Mix</div>
-                        <h3>Worse moves allowed</h3>
-                        <p class="footnote">Escapes traps by sometimes stepping away from the current best state.</p>
+                    <div class="anneal-arrow reveal delay-1">→</div>
+                    <article class="anneal-stage reveal-left delay-1">
+                        <span class="anneal-stage-num">2</span>
+                        <h2>Mix</h2>
+                        <div class="particle-field">
+                            <span class="particle" style="left: 16%; top: 26%;"></span>
+                            <span class="particle" style="left: 31%; top: 60%;"></span>
+                            <span class="particle" style="left: 52%; top: 34%;"></span>
+                            <span class="particle" style="left: 74%; top: 48%;"></span>
+                            <span class="particle dim" style="left: 62%; top: 18%;"></span>
+                            <span class="particle dim" style="left: 18%; top: 74%;"></span>
+                            <span class="motion-line" style="left: 10%; top: 48%; width: 26%; transform: rotate(-28deg);"></span>
+                            <span class="motion-line" style="left: 46%; top: 62%; width: 24%; transform: rotate(22deg);"></span>
+                            <span class="motion-line" style="left: 36%; top: 18%; width: 22%; transform: rotate(8deg);"></span>
+                        </div>
+                        <p>Temporary disorder allows worse moves, helping the algorithm escape traps and search new regions.</p>
                     </article>
-                    <article class="stat-card reveal delay-2">
-                        <div class="big-number accent-sa">Cool</div>
-                        <h3>Temperature drops</h3>
-                        <p class="footnote">Randomness decreases through a cooling schedule.</p>
+                    <div class="anneal-arrow reveal delay-2">→</div>
+                    <article class="anneal-stage reveal-left delay-2">
+                        <span class="anneal-stage-num">3</span>
+                        <h2>Cool</h2>
+                        <div class="cool-curve">
+                            <div class="cool-path">
+                                <svg viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true">
+                                    <path d="M4 14 C20 18, 28 42, 44 48 S70 72, 96 86" fill="none" stroke="rgba(126,224,209,0.9)" stroke-width="4" stroke-linecap="round"/>
+                                </svg>
+                            </div>
+                            <div class="cool-labels">
+                                <span class="cool-label" style="left: 12%; top: 10%;">High T</span>
+                                <span class="cool-label" style="right: 10%; bottom: 10%;">Low T</span>
+                            </div>
+                        </div>
+                        <p>A cooling schedule gradually reduces randomness, so fewer risky moves are accepted over time.</p>
                     </article>
-                    <article class="stat-card reveal delay-3">
-                        <div class="big-number accent-sa">Settle</div>
-                        <h3>Stable solution</h3>
-                        <p class="footnote">The algorithm focuses near strong candidates and becomes more greedy.</p>
+                    <div class="anneal-arrow reveal delay-3">→</div>
+                    <article class="anneal-stage reveal-left delay-3">
+                        <span class="anneal-stage-num">4</span>
+                        <h2>Settle</h2>
+                        <div class="ordered-grid">
+                            <span class="ordered-node"></span><span class="ordered-node"></span><span class="ordered-node"></span><span class="ordered-node"></span>
+                            <span class="ordered-node"></span><span class="ordered-node"></span><span class="ordered-node"></span><span class="ordered-node"></span>
+                            <span class="ordered-node"></span><span class="ordered-node"></span><span class="ordered-node"></span><span class="ordered-node"></span>
+                        </div>
+                        <p>At low temperature, the system becomes stable and the algorithm focuses near stronger candidate solutions.</p>
                     </article>
                 </div>
             </div>
