@@ -857,6 +857,184 @@
             border-color: rgba(240, 111, 155, 0.32);
         }
 
+        .agenda-slide .frame {
+            gap: clamp(1rem, 2vw, 1.6rem);
+        }
+
+        .roadmap-ipo {
+            display: grid;
+            grid-template-columns: minmax(0, 1.15fr) auto minmax(0, 2fr) auto minmax(0, 1.15fr);
+            gap: clamp(0.7rem, 1vw, 1rem);
+            align-items: center;
+        }
+
+        .roadmap-node {
+            position: relative;
+            min-height: clamp(20rem, 44vh, 25rem);
+            padding: clamp(1.1rem, 1.8vw, 1.35rem);
+            display: grid;
+            gap: clamp(0.7rem, 1vw, 0.95rem);
+            align-content: start;
+            border-radius: clamp(1rem, 1.8vw, 1.5rem);
+            background:
+                linear-gradient(180deg, rgba(255, 255, 255, 0.08), rgba(255, 255, 255, 0.025)),
+                rgba(11, 23, 42, 0.92);
+            border: 1px solid rgba(255, 255, 255, 0.14);
+            box-shadow: 0 1.6rem 3.6rem rgba(0, 0, 0, 0.26);
+            overflow: hidden;
+        }
+
+        .roadmap-node::before {
+            content: "";
+            position: absolute;
+            inset: 0;
+            pointer-events: none;
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.08), transparent 42%);
+        }
+
+        .roadmap-node-label {
+            font-size: var(--small-size);
+            font-weight: 800;
+            letter-spacing: 0.16em;
+            text-transform: uppercase;
+        }
+
+        .roadmap-node h2 {
+            font-family: var(--font-display);
+            font-size: clamp(1.35rem, 2.55vw, 2.35rem);
+            line-height: 0.98;
+            max-width: 9ch;
+        }
+
+        .roadmap-node p {
+            color: var(--text-secondary);
+            font-size: clamp(0.95rem, 1.25vw, 1.04rem);
+            line-height: 1.42;
+        }
+
+        .roadmap-input .roadmap-node-label,
+        .roadmap-input h2 {
+            color: var(--hc);
+        }
+
+        .roadmap-output .roadmap-node-label,
+        .roadmap-output h2 {
+            color: var(--gold);
+        }
+
+        .roadmap-process {
+            position: relative;
+            min-height: clamp(20rem, 44vh, 25rem);
+            padding: clamp(1.2rem, 1.8vw, 1.45rem);
+            border-radius: clamp(1rem, 1.8vw, 1.5rem);
+            background:
+                radial-gradient(circle at top right, rgba(126, 224, 209, 0.12), transparent 28%),
+                linear-gradient(180deg, rgba(255, 255, 255, 0.07), rgba(255, 255, 255, 0.02)),
+                rgba(11, 23, 42, 0.92);
+            border: 1px solid rgba(255, 255, 255, 0.14);
+            box-shadow: 0 1.6rem 3.6rem rgba(0, 0, 0, 0.26);
+            display: grid;
+            gap: clamp(0.8rem, 1.2vw, 1rem);
+        }
+
+        .roadmap-process-head {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 1rem;
+        }
+
+        .roadmap-process-head .roadmap-node-label {
+            color: var(--sa);
+        }
+
+        .roadmap-runway {
+            position: relative;
+            display: grid;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            gap: clamp(0.75rem, 1vw, 1rem);
+            align-items: stretch;
+            min-height: clamp(13rem, 26vh, 16rem);
+        }
+
+        .roadmap-stage {
+            position: relative;
+            z-index: 1;
+            display: grid;
+            gap: 0.5rem;
+            align-content: start;
+            padding: clamp(0.95rem, 1.3vw, 1.1rem);
+            border-radius: clamp(1rem, 1.4vw, 1.2rem);
+            background: rgba(255, 255, 255, 0.06);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            min-height: clamp(12rem, 24vh, 14rem);
+        }
+
+        .roadmap-stage::after {
+            content: ">";
+            position: absolute;
+            top: 50%;
+            right: calc(-1 * clamp(0.8rem, 1vw, 1rem));
+            transform: translateY(-50%);
+            color: rgba(126, 224, 209, 0.5);
+            font-size: clamp(1.2rem, 1.8vw, 1.5rem);
+            font-weight: 800;
+        }
+
+        .roadmap-stage:last-child::after {
+            display: none;
+        }
+
+        .roadmap-stage-tag {
+            width: fit-content;
+            padding: 0.38rem 0.7rem;
+            border-radius: 999px;
+            font-size: var(--small-size);
+            font-weight: 800;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            border: 1px solid rgba(255, 255, 255, 0.12);
+        }
+
+        .roadmap-stage:nth-child(1) .roadmap-stage-tag {
+            color: var(--hc);
+            background: rgba(242, 166, 90, 0.14);
+            border-color: rgba(242, 166, 90, 0.28);
+        }
+
+        .roadmap-stage:nth-child(2) .roadmap-stage-tag {
+            color: var(--sa);
+            background: rgba(126, 224, 209, 0.14);
+            border-color: rgba(126, 224, 209, 0.28);
+        }
+
+        .roadmap-stage:nth-child(3) .roadmap-stage-tag {
+            color: var(--ga);
+            background: rgba(240, 111, 155, 0.14);
+            border-color: rgba(240, 111, 155, 0.28);
+        }
+
+        .roadmap-stage h3 {
+            font-size: clamp(1.1rem, 1.7vw, 1.35rem);
+            line-height: 1.08;
+        }
+
+        .roadmap-stage p {
+            color: var(--text-secondary);
+            font-size: clamp(0.9rem, 1.18vw, 0.98rem);
+            line-height: 1.36;
+        }
+
+        .roadmap-arrow {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: rgba(255, 255, 255, 0.35);
+            font-size: clamp(1.4rem, 2.2vw, 2rem);
+            font-weight: 800;
+            line-height: 1;
+        }
+
         .footnote {
             color: var(--text-muted);
             font-size: var(--small-size);
@@ -1113,7 +1291,8 @@
             .hc-hero-top,
             .hc-benefits,
             .agenda-stack,
-            .anneal-diagram {
+            .anneal-diagram,
+            .roadmap-ipo {
                 grid-template-columns: 1fr;
             }
 
@@ -1121,7 +1300,8 @@
             .grid-2,
             .timeline,
             .hc-flow,
-            .hc-storey-stack {
+            .hc-storey-stack,
+            .roadmap-runway {
                 grid-template-columns: repeat(2, minmax(0, 1fr));
             }
         }
@@ -1134,6 +1314,10 @@
             .hc-benefits,
             .hc-storey-stack,
             .agenda-stack {
+                grid-template-columns: 1fr;
+            }
+
+            .roadmap-runway {
                 grid-template-columns: 1fr;
             }
 
@@ -1180,42 +1364,41 @@
         <div class="slide-content">
             <div class="frame">
                 <div class="eyebrow reveal">Roadmap</div>
-                <div class="storey-stack agenda-stack">
-                    <article class="storey-card agenda-hc agenda-storey-1 reveal-left">
-                        <span class="storey-num">1</span>
-                        <div class="kicker accent-hc">Part I</div>
-                        <h3>Local search basics</h3>
-                        <ul>
-                            <li>Optimization as local improvement</li>
-                            <li>Good enough beats exhaustive</li>
-                        </ul>
+                <div class="roadmap-ipo">
+                    <article class="roadmap-node roadmap-input reveal-left">
+                        <div class="roadmap-node-label">Input</div>
+                        <h2>Optimization problem</h2>
+                        <p>We begin with a search space, an initial solution, and the question: how do we improve it efficiently?</p>
                     </article>
-                    <article class="storey-card agenda-hc agenda-storey-2 reveal-left delay-1">
-                        <span class="storey-num">2</span>
-                        <div class="kicker accent-hc">Part II</div>
-                        <h3>Hill Climbing</h3>
-                        <ul>
-                            <li>Greedy uphill movement</li>
-                            <li>Problems and variants</li>
-                        </ul>
+                    <div class="roadmap-arrow reveal delay-1" aria-hidden="true">&rarr;</div>
+                    <article class="roadmap-process reveal-scale delay-1">
+                        <div class="roadmap-process-head">
+                            <div class="roadmap-node-label">Process</div>
+                            <div class="footnote">three optimization strategies</div>
+                        </div>
+                        <div class="roadmap-runway">
+                            <div class="roadmap-stage">
+                                <div class="roadmap-stage-tag">HC</div>
+                                <h3>Hill Climbing</h3>
+                                <p>Move greedily to the best nearby state.</p>
+                            </div>
+                            <div class="roadmap-stage">
+                                <div class="roadmap-stage-tag">SA</div>
+                                <h3>Simulated Annealing</h3>
+                                <p>Allow some worse moves while temperature is high.</p>
+                            </div>
+                            <div class="roadmap-stage">
+                                <div class="roadmap-stage-tag">GA</div>
+                                <h3>Genetic Algorithms</h3>
+                                <p>Evolve many candidate solutions at once.</p>
+                            </div>
+                        </div>
                     </article>
-                    <article class="storey-card agenda-sa agenda-storey-3 reveal-left delay-2">
-                        <span class="storey-num">3</span>
-                        <div class="kicker accent-sa">Part III</div>
-                        <h3>Simulated Annealing</h3>
-                        <ul>
-                            <li>Temperature-driven search</li>
-                            <li>Exploration then exploitation</li>
-                        </ul>
-                    </article>
-                    <article class="storey-card agenda-ga agenda-storey-4 reveal-left delay-3">
-                        <span class="storey-num">4</span>
-                        <div class="kicker accent-ga">Part IV</div>
-                        <h3>Genetic Algorithms</h3>
-                        <ul>
-                            <li>Population-based evolution</li>
-                            <li>When to use each method</li>
-                        </ul>
+                    <div class="roadmap-arrow reveal delay-2" aria-hidden="true">&rarr;</div>
+                    <article class="roadmap-node roadmap-output reveal-left delay-2">
+                        <div class="roadmap-node-label">Output</div>
+                        <h2>Best-fit algorithm choice</h2>
+                        <p>We end with a decision: which method fits the size, complexity, and landscape of the problem best?</p>
                     </article>
                 </div>
             </div>
@@ -1950,4 +2133,5 @@
     </script>
 </body>
 </html>
+
 
