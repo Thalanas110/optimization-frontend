@@ -1060,6 +1060,83 @@
             width: clamp(2rem, 2.6vw, 2.6rem);
         }
 
+        .code-demo-slide .frame {
+            gap: clamp(0.9rem, 1.8vw, 1.4rem);
+        }
+
+        .code-demo-panel {
+            padding: clamp(1.15rem, 2vw, 1.6rem);
+            display: grid;
+            gap: clamp(0.8rem, 1.4vw, 1.05rem);
+            background:
+                radial-gradient(circle at top right, rgba(240, 111, 155, 0.14), transparent 24%),
+                linear-gradient(180deg, rgba(255, 255, 255, 0.07), rgba(255, 255, 255, 0.02)),
+                rgba(10, 18, 34, 0.94);
+            border: 1px solid rgba(255, 255, 255, 0.14);
+            border-radius: clamp(1rem, 1.6vw, 1.4rem);
+            box-shadow: 0 1.6rem 3.8rem rgba(0, 0, 0, 0.3);
+        }
+
+        .code-demo-head {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 1rem;
+        }
+
+        .code-demo-meta {
+            display: flex;
+            gap: 0.45rem;
+        }
+
+        .code-dot {
+            width: 0.75rem;
+            height: 0.75rem;
+            border-radius: 999px;
+        }
+
+        .code-dot.red { background: #ff6b6b; }
+        .code-dot.yellow { background: #ffd166; }
+        .code-dot.green { background: #80ed99; }
+
+        .code-demo-label {
+            color: var(--ga);
+            font-size: var(--small-size);
+            font-weight: 800;
+            letter-spacing: 0.14em;
+            text-transform: uppercase;
+        }
+
+        .code-block {
+            margin: 0;
+            padding: clamp(1rem, 1.8vw, 1.35rem);
+            border-radius: clamp(0.95rem, 1.3vw, 1.15rem);
+            background: rgba(5, 10, 22, 0.86);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            overflow: hidden;
+        }
+
+        .code-block code {
+            display: grid;
+            gap: 0.22rem;
+            font-family: "JetBrains Mono", "IBM Plex Mono", Consolas, monospace;
+            font-size: clamp(0.88rem, 1.2vw, 1rem);
+            line-height: 1.5;
+            color: #e9eef8;
+            white-space: pre-wrap;
+        }
+
+        .code-line {
+            display: block;
+        }
+
+        .code-comment { color: #7f8aa3; }
+        .code-keyword { color: #7ee0d1; }
+        .code-fn { color: #ffd166; }
+        .code-var { color: #f4efe6; }
+        .code-num { color: #f2a65a; }
+        .code-accent { color: #f06f9b; }
+
         .footnote {
             color: var(--text-muted);
             font-size: var(--small-size);
@@ -1360,7 +1437,7 @@
          SLIDE 1: TITLE
          =========================================== -->
     <section class="slide title-slide">
-       <div class="slide-number">01 / 19</div>
+       <div class="slide-number">01 / 20</div>
         <div class="slide-content">
             <div class="frame">
                 <div class="hero-card reveal-scale">
@@ -1385,7 +1462,7 @@
          SLIDE 2: AGENDA
          =========================================== -->
     <section class="slide agenda-slide">
-        <div class="slide-number">02 / 19</div>
+        <div class="slide-number">02 / 20</div>
         <div class="slide-content">
             <div class="frame">
                 <div class="eyebrow reveal">Roadmap</div>
@@ -1434,7 +1511,7 @@
          SLIDE 3: OPTIMIZATION OVERVIEW
          =========================================== -->
     <section class="slide optimization-slide">
-        <div class="slide-number">03 / 19</div>
+        <div class="slide-number">03 / 20</div>
         <div class="slide-content">
             <div class="frame two-column">
                 <div class="content-card reveal">
@@ -1469,7 +1546,7 @@
          SLIDE 4: HILL CLIMBING
          =========================================== -->
     <section class="slide hill-climbing-slide">
-        <div class="slide-number">04 / 19</div>
+        <div class="slide-number">04 / 20</div>
         <div class="slide-content">
             <div class="frame">
                 <div class="eyebrow reveal accent-hc">Hill Climbing</div>
@@ -1535,7 +1612,7 @@
          SLIDE 5: HILL CLIMBING PROBLEMS
          =========================================== -->
     <section class="slide hill-problems-slide">
-        <div class="slide-number">05 / 19</div>
+        <div class="slide-number">05 / 20</div>
         <div class="slide-content">
             <div class="frame">
                 <div class="eyebrow reveal accent-hc">Hill Climbing Problems and Variants</div>
@@ -1574,7 +1651,7 @@
          SLIDE 6: SIMULATED ANNEALING
          =========================================== -->
     <section class="slide sa-intro-slide">
-        <div class="slide-number">06 / 19</div>
+        <div class="slide-number">06 / 20</div>
         <div class="slide-content">
             <div class="frame two-column">
                 <div class="hero-card reveal-scale">
@@ -1595,7 +1672,7 @@
          SLIDE 7: METALLURGY
          =========================================== -->
     <section class="slide metallurgy-slide">
-        <div class="slide-number">07 / 19</div>
+        <div class="slide-number">07 / 20</div>
         <div class="slide-content">
             <div class="frame">
                 <div class="eyebrow reveal accent-sa">Metallurgy Analogy</div>
@@ -1670,7 +1747,7 @@
          SLIDE 8: ACCEPTANCE RULE
          =========================================== -->
     <section class="slide acceptance-slide">
-        <div class="slide-number">08 / 19</div>
+        <div class="slide-number">08 / 20</div>
         <div class="slide-content">
             <div class="frame two-column">
                 <div class="process-card reveal-left">
@@ -1701,7 +1778,7 @@
          SLIDE 9: EXPLORATION VS EXPLOITATION
          =========================================== -->
     <section class="slide temp-slide">
-        <div class="slide-number">09 / 19</div>
+        <div class="slide-number">09 / 20</div>
         <div class="slide-content">
             <div class="frame">
                 <div class="eyebrow reveal accent-sa">Exploration vs Exploitation</div>
@@ -1733,7 +1810,7 @@
          SLIDE 10: GA OVERVIEW
          =========================================== -->
     <section class="slide ga-overview-slide">
-        <div class="slide-number">10 / 19</div>
+        <div class="slide-number">10 / 20</div>
         <div class="slide-content">
             <div class="frame two-column">
                 <div class="hero-card reveal-scale">
@@ -1767,7 +1844,7 @@
          SLIDE 11: GA OPERATORS
          =========================================== -->
     <section class="slide ga-operators-slide">
-        <div class="slide-number">11 / 19</div>
+        <div class="slide-number">11 / 20</div>
         <div class="slide-content">
             <div class="frame">
                 <div class="eyebrow reveal accent-ga">Selection, Crossover, Mutation, Generations</div>
@@ -1797,7 +1874,7 @@
          SLIDE 12: SINGLE-POINT SEARCH
          =========================================== -->
     <section class="slide single-point-slide">
-        <div class="slide-number">12 / 19</div>
+        <div class="slide-number">12 / 20</div>
         <div class="slide-content">
             <div class="frame">
                 <div class="eyebrow reveal">Search Style Comparison</div>
@@ -1826,7 +1903,7 @@
          SLIDE 13: POPULATION SEARCH
          =========================================== -->
     <section class="slide population-slide">
-        <div class="slide-number">13 / 19</div>
+        <div class="slide-number">13 / 20</div>
         <div class="slide-content">
             <div class="frame">
                 <div class="comparison-card reveal-scale">
@@ -1854,7 +1931,7 @@
          SLIDE 14: EXPLORER METAPHOR
          =========================================== -->
     <section class="slide explorers-slide">
-        <div class="slide-number">14 / 19</div>
+        <div class="slide-number">14 / 20</div>
         <div class="slide-content">
             <div class="frame two-column">
                 <div class="landscape reveal">
@@ -1879,7 +1956,7 @@
          SLIDE 15: WHEN TO USE HC
          =========================================== -->
     <section class="slide when-hc-slide">
-        <div class="slide-number">15 / 19</div>
+        <div class="slide-number">15 / 20</div>
         <div class="slide-content">
             <div class="frame">
                 <div class="eyebrow reveal accent-hc">When to Use Hill Climbing</div>
@@ -1913,7 +1990,7 @@
          SLIDE 16: WHEN TO USE SA
          =========================================== -->
     <section class="slide when-sa-slide">
-        <div class="slide-number">16 / 19</div>
+        <div class="slide-number">16 / 20</div>
         <div class="slide-content">
             <div class="frame">
                 <div class="eyebrow reveal accent-sa">When to Use Simulated Annealing</div>
@@ -1946,7 +2023,7 @@
          SLIDE 17: WHEN TO USE GA
          =========================================== -->
     <section class="slide when-ga-slide">
-        <div class="slide-number">17 / 19</div>
+        <div class="slide-number">17 / 20</div>
         <div class="slide-content">
             <div class="frame">
                 <div class="eyebrow reveal accent-ga">When to Use Genetic Algorithms</div>
@@ -1981,10 +2058,37 @@
     </section>
 
     <!-- ===========================================
-         SLIDE 18: CONCLUSION
+         SLIDE 18: CODING DEMO
+         =========================================== -->
+    <section class="slide code-demo-slide">
+        <div class="slide-number">18 / 20</div>
+        <div class="slide-content">
+            <div class="frame">
+                <div class="eyebrow reveal accent-ga">Coding Demo</div>
+                <article class="code-demo-panel reveal-scale">
+                    <div class="code-demo-head">
+                        <div>
+                            <h2 class="section-title">Simulated Annealing Pseudocode</h2>
+                            <p class="footnote">A compact sketch of how temperature guides search from exploration to refinement.</p>
+                        </div>
+                        <div class="code-demo-meta" aria-hidden="true">
+                            <span class="code-dot red"></span>
+                            <span class="code-dot yellow"></span>
+                            <span class="code-dot green"></span>
+                        </div>
+                    </div>
+                    <div class="code-demo-label">Pseudo-code</div>
+                    <pre class="code-block"><code><span class="code-line"><span class="code-keyword">function</span> <span class="code-fn">simulatedAnnealing</span>(<span class="code-var">state</span>, <span class="code-var">temperature</span>):</span><span class="code-line">    <span class="code-var">best</span> = <span class="code-var">state</span></span><span class="code-line">    <span class="code-keyword">while</span> <span class="code-var">temperature</span> &gt; <span class="code-num">0</span>:</span><span class="code-line">        <span class="code-var">neighbor</span> = <span class="code-fn">randomNeighbor</span>(<span class="code-var">state</span>)</span><span class="code-line">        <span class="code-var">delta</span> = <span class="code-fn">score</span>(<span class="code-var">neighbor</span>) - <span class="code-fn">score</span>(<span class="code-var">state</span>)</span><span class="code-line">        <span class="code-keyword">if</span> <span class="code-var">delta</span> &gt; <span class="code-num">0</span> <span class="code-keyword">or</span> <span class="code-fn">random</span>() &lt; <span class="code-fn">exp</span>(<span class="code-var">delta</span> / <span class="code-var">temperature</span>):</span><span class="code-line">            <span class="code-var">state</span> = <span class="code-var">neighbor</span></span><span class="code-line">        <span class="code-keyword">if</span> <span class="code-fn">score</span>(<span class="code-var">state</span>) &gt; <span class="code-fn">score</span>(<span class="code-var">best</span>):</span><span class="code-line">            <span class="code-var">best</span> = <span class="code-var">state</span></span><span class="code-line">        <span class="code-var">temperature</span> = <span class="code-var">temperature</span> * <span class="code-accent">coolingRate</span></span><span class="code-line">    <span class="code-keyword">return</span> <span class="code-var">best</span></span></code></pre>
+                </article>
+            </div>
+        </div>
+    </section>
+
+    <!-- ===========================================
+         SLIDE 19: CONCLUSION
          =========================================== -->
     <section class="slide conclusion-slide">
-        <div class="slide-number">18 / 19</div>
+        <div class="slide-number">19 / 20</div>
         <div class="slide-content">
             <div class="frame">
                 <div class="comparison-card reveal-scale">
@@ -2011,10 +2115,10 @@
     </section>
 
     <!-- ===========================================
-         SLIDE 19: THANK YOU
+         SLIDE 20: THANK YOU
          =========================================== -->
     <section class="slide thank-you-slide">
-        <div class="slide-number">19 / 19</div>
+        <div class="slide-number">20 / 20</div>
         <div class="slide-content">
             <div class="frame center-stack">
                 <div class="hero-card reveal-scale center-stack">
@@ -2158,5 +2262,6 @@
     </script>
 </body>
 </html>
+
 
 
