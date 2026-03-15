@@ -1137,6 +1137,144 @@
         .code-num { color: #f2a65a; }
         .code-accent { color: #f06f9b; }
 
+        .team-slide .frame {
+            gap: clamp(0.8rem, 1.6vw, 1.2rem);
+            width: min(100%, 1280px);
+        }
+
+        .team-root {
+            justify-self: center;
+            width: min(100%, 26rem);
+            padding: clamp(1rem, 1.8vw, 1.25rem);
+            display: grid;
+            gap: 0.45rem;
+            text-align: center;
+            border-radius: clamp(1rem, 1.6vw, 1.35rem);
+            background:
+                radial-gradient(circle at top right, rgba(243, 210, 122, 0.14), transparent 28%),
+                linear-gradient(180deg, rgba(255,255,255,0.07), rgba(255,255,255,0.02)),
+                rgba(11, 23, 42, 0.94);
+            border: 1px solid rgba(255,255,255,0.16);
+            box-shadow: 0 1.4rem 3.4rem rgba(0,0,0,0.28);
+        }
+
+        .team-root h2 {
+            font-family: var(--font-display);
+            font-size: clamp(1.8rem, 3vw, 2.8rem);
+            line-height: 1;
+        }
+
+        .team-root p {
+            color: var(--text-secondary);
+            font-size: clamp(0.96rem, 1.2vw, 1.04rem);
+        }
+
+        .team-trunk {
+            justify-self: center;
+            width: 2px;
+            height: clamp(1rem, 3vh, 1.8rem);
+            background: linear-gradient(180deg, rgba(243,210,122,0.75), rgba(243,210,122,0.15));
+        }
+
+        .team-tree {
+            position: relative;
+            display: grid;
+            grid-template-columns: repeat(4, minmax(0, 1fr));
+            gap: clamp(0.75rem, 1vw, 1rem);
+            padding-top: clamp(1rem, 1.8vw, 1.4rem);
+        }
+
+        .team-tree::before {
+            content: "";
+            position: absolute;
+            left: 12%;
+            right: 12%;
+            top: 0;
+            height: 2px;
+            background: linear-gradient(90deg, rgba(243,210,122,0.2), rgba(243,210,122,0.8), rgba(243,210,122,0.2));
+        }
+
+        .member-card {
+            position: relative;
+            min-height: clamp(9rem, 18vh, 11rem);
+            padding: clamp(0.9rem, 1.35vw, 1.05rem);
+            display: grid;
+            gap: 0.45rem;
+            align-content: start;
+            border-radius: clamp(0.95rem, 1.3vw, 1.15rem);
+            background:
+                linear-gradient(180deg, rgba(255,255,255,0.08), rgba(255,255,255,0.03)),
+                rgba(15, 27, 46, 0.94);
+            border: 1px solid rgba(255,255,255,0.12);
+            box-shadow: 0 1.1rem 2.4rem rgba(0,0,0,0.22);
+        }
+
+        .member-card::before {
+            content: "";
+            position: absolute;
+            left: 50%;
+            top: calc(-1 * clamp(1rem, 1.8vw, 1.4rem));
+            width: 2px;
+            height: clamp(1rem, 1.8vw, 1.4rem);
+            transform: translateX(-50%);
+            background: linear-gradient(180deg, rgba(243,210,122,0.75), rgba(243,210,122,0.15));
+        }
+
+        .member-card.wide {
+            grid-column: span 2;
+        }
+
+        .member-head {
+            display: grid;
+            grid-template-columns: auto 1fr;
+            gap: 0.7rem;
+            align-items: center;
+        }
+
+        .member-avatar {
+            width: clamp(2.4rem, 3vw, 2.8rem);
+            height: clamp(2.4rem, 3vw, 2.8rem);
+            border-radius: 999px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-size: clamp(0.9rem, 1.1vw, 1rem);
+            font-weight: 800;
+            color: var(--text-primary);
+            border: 1px solid rgba(255,255,255,0.14);
+        }
+
+        .member-avatar.male {
+            background: linear-gradient(135deg, rgba(126,224,209,0.26), rgba(126,224,209,0.1));
+        }
+
+        .member-avatar.female {
+            background: linear-gradient(135deg, rgba(240,111,155,0.26), rgba(240,111,155,0.1));
+        }
+
+        .member-card h3 {
+            font-size: clamp(1rem, 1.3vw, 1.1rem);
+            line-height: 1.08;
+        }
+
+        .member-role {
+            color: var(--text-secondary);
+            font-size: clamp(0.82rem, 1vw, 0.9rem);
+            line-height: 1.35;
+        }
+
+        .member-tag {
+            width: fit-content;
+            padding: 0.28rem 0.6rem;
+            border-radius: 999px;
+            font-size: clamp(0.72rem, 0.85vw, 0.8rem);
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            color: var(--gold);
+            background: rgba(243,210,122,0.1);
+            border: 1px solid rgba(243,210,122,0.18);
+        }
+
         .footnote {
             color: var(--text-muted);
             font-size: var(--small-size);
@@ -1437,7 +1575,7 @@
          SLIDE 1: TITLE
          =========================================== -->
     <section class="slide title-slide">
-       <div class="slide-number">01 / 20</div>
+       <div class="slide-number">01 / 21</div>
         <div class="slide-content">
             <div class="frame">
                 <div class="hero-card reveal-scale">
@@ -1449,17 +1587,103 @@
                         <span class="badge sa">Simulated Annealing</span>
                         <span class="badge ga">Genetic Algorithms</span>
                     </div>
-                    <div class="hero-meta reveal delay-4">
-                        <span>Presented by Group 4</span>
-                        <span>Alvarez, Aquino, Aratea, Batallones, Dimate, Norial, Reyes</span>
-                    </div>
                 </div>
             </div>
         </div>
     </section>
 
     <!-- ===========================================
-         SLIDE 2: AGENDA
+         SLIDE 2: PRESENTED BY
+         =========================================== -->
+    <section class="slide team-slide">
+        <div class="slide-number">02 / 21</div>
+        <div class="slide-content">
+            <div class="frame">
+                <div class="eyebrow reveal">Presented By</div>
+                <article class="team-root reveal-scale">
+                    <div class="kicker">Group 4</div>
+                    <h2>Group Members and Roles</h2>
+                    <p>A quick team map of who presents, explains, designs, and supports the demo.</p>
+                </article>
+                <div class="team-trunk reveal delay-1" aria-hidden="true"></div>
+                <div class="team-tree">
+                    <article class="member-card reveal-left">
+                        <div class="member-head">
+                            <span class="member-avatar female">RA</span>
+                            <div>
+                                <h3>Rosemarie Aratea</h3>
+                                <div class="member-tag">Lead</div>
+                            </div>
+                        </div>
+                        <p class="member-role">Lead Presenter<br>Opening and Closing</p>
+                    </article>
+                    <article class="member-card reveal-left delay-1">
+                        <div class="member-head">
+                            <span class="member-avatar female">LA</span>
+                            <div>
+                                <h3>Louise Alvarez</h3>
+                                <div class="member-tag">Concepts</div>
+                            </div>
+                        </div>
+                        <p class="member-role">Concept Explainer<br>Definitions</p>
+                    </article>
+                    <article class="member-card reveal-left delay-2">
+                        <div class="member-head">
+                            <span class="member-avatar male">AD</span>
+                            <div>
+                                <h3>Adriaan Dimate</h3>
+                                <div class="member-tag">Demo</div>
+                            </div>
+                        </div>
+                        <p class="member-role">Practical Illustration<br>Coding Demo / Slide Designer 2</p>
+                    </article>
+                    <article class="member-card reveal-left delay-3">
+                        <div class="member-head">
+                            <span class="member-avatar male">IA</span>
+                            <div>
+                                <h3>Ian Aquino</h3>
+                                <div class="member-tag">Q&amp;A</div>
+                            </div>
+                        </div>
+                        <p class="member-role">Q&amp;A Handler<br>Quick Check Facilitator</p>
+                    </article>
+                    <article class="member-card reveal-left delay-1">
+                        <div class="member-head">
+                            <span class="member-avatar female">CN</span>
+                            <div>
+                                <h3>Chrizelda Norial</h3>
+                                <div class="member-tag">Design</div>
+                            </div>
+                        </div>
+                        <p class="member-role">Slide Designer 1<br>Sources Compiler</p>
+                    </article>
+                    <article class="member-card reveal-left delay-2">
+                        <div class="member-head">
+                            <span class="member-avatar female">ZR</span>
+                            <div>
+                                <h3>Zoie Reyes</h3>
+                                <div class="member-tag">Support</div>
+                            </div>
+                        </div>
+                        <p class="member-role">Additional Presenter</p>
+                    </article>
+                    <article class="member-card reveal-left delay-3">
+                        <div class="member-head">
+                            <span class="member-avatar male">VB</span>
+                            <div>
+                                <h3>Vincent Batallones</h3>
+                                <div class="member-tag">Support</div>
+                            </div>
+                        </div>
+                        <p class="member-role">Additional Presenter</p>
+                    </article>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ===========================================
+         SLIDE 3: AGENDA
          =========================================== -->
     <section class="slide agenda-slide">
         <div class="slide-number">02 / 20</div>
