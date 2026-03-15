@@ -859,28 +859,30 @@
 
         .agenda-slide .frame {
             gap: clamp(1rem, 2vw, 1.6rem);
+            width: min(100%, 1280px);
         }
 
         .roadmap-ipo {
             display: grid;
-            grid-template-columns: minmax(0, 1.15fr) auto minmax(0, 2fr) auto minmax(0, 1.15fr);
-            gap: clamp(0.7rem, 1vw, 1rem);
+            grid-template-columns: minmax(0, 1.02fr) auto minmax(0, 2.85fr) auto minmax(0, 1.02fr);
+            gap: clamp(0.9rem, 1.2vw, 1.2rem);
             align-items: center;
         }
 
         .roadmap-node {
             position: relative;
-            min-height: clamp(20rem, 44vh, 25rem);
-            padding: clamp(1.1rem, 1.8vw, 1.35rem);
+            min-height: clamp(22rem, 48vh, 28rem);
+            padding: clamp(1.25rem, 2vw, 1.55rem);
             display: grid;
-            gap: clamp(0.7rem, 1vw, 0.95rem);
+            gap: clamp(0.85rem, 1.2vw, 1.05rem);
             align-content: start;
-            border-radius: clamp(1rem, 1.8vw, 1.5rem);
+            border-radius: clamp(1.1rem, 1.9vw, 1.65rem);
             background:
+                radial-gradient(circle at top right, rgba(255, 255, 255, 0.06), transparent 28%),
                 linear-gradient(180deg, rgba(255, 255, 255, 0.08), rgba(255, 255, 255, 0.025)),
                 rgba(11, 23, 42, 0.92);
-            border: 1px solid rgba(255, 255, 255, 0.14);
-            box-shadow: 0 1.6rem 3.6rem rgba(0, 0, 0, 0.26);
+            border: 1px solid rgba(255, 255, 255, 0.18);
+            box-shadow: 0 1.8rem 4rem rgba(0, 0, 0, 0.28);
             overflow: hidden;
         }
 
@@ -901,15 +903,20 @@
 
         .roadmap-node h2 {
             font-family: var(--font-display);
-            font-size: clamp(1.35rem, 2.55vw, 2.35rem);
+            font-size: clamp(1.5rem, 2.85vw, 2.7rem);
             line-height: 0.98;
-            max-width: 9ch;
+            max-width: 100%;
+            overflow-wrap: anywhere;
+            word-break: break-word;
+            hyphens: auto;
         }
 
         .roadmap-node p {
             color: var(--text-secondary);
-            font-size: clamp(0.95rem, 1.25vw, 1.04rem);
-            line-height: 1.42;
+            font-size: clamp(1rem, 1.32vw, 1.12rem);
+            line-height: 1.46;
+            max-width: 100%;
+            overflow-wrap: anywhere;
         }
 
         .roadmap-input .roadmap-node-label,
@@ -924,17 +931,18 @@
 
         .roadmap-process {
             position: relative;
-            min-height: clamp(20rem, 44vh, 25rem);
-            padding: clamp(1.2rem, 1.8vw, 1.45rem);
-            border-radius: clamp(1rem, 1.8vw, 1.5rem);
+            min-height: clamp(22rem, 48vh, 28rem);
+            padding: clamp(1.35rem, 2vw, 1.7rem);
+            border-radius: clamp(1.1rem, 1.9vw, 1.65rem);
             background:
-                radial-gradient(circle at top right, rgba(126, 224, 209, 0.12), transparent 28%),
+                radial-gradient(circle at top right, rgba(126, 224, 209, 0.16), transparent 28%),
+                radial-gradient(circle at bottom left, rgba(255, 255, 255, 0.05), transparent 24%),
                 linear-gradient(180deg, rgba(255, 255, 255, 0.07), rgba(255, 255, 255, 0.02)),
                 rgba(11, 23, 42, 0.92);
-            border: 1px solid rgba(255, 255, 255, 0.14);
-            box-shadow: 0 1.6rem 3.6rem rgba(0, 0, 0, 0.26);
+            border: 1px solid rgba(126, 224, 209, 0.2);
+            box-shadow: 0 1.8rem 4rem rgba(0, 0, 0, 0.28);
             display: grid;
-            gap: clamp(0.8rem, 1.2vw, 1rem);
+            gap: clamp(0.9rem, 1.3vw, 1.1rem);
         }
 
         .roadmap-process-head {
@@ -952,22 +960,24 @@
             position: relative;
             display: grid;
             grid-template-columns: repeat(3, minmax(0, 1fr));
-            gap: clamp(0.75rem, 1vw, 1rem);
+            gap: clamp(0.8rem, 0.95vw, 0.95rem);
             align-items: stretch;
-            min-height: clamp(13rem, 26vh, 16rem);
+            min-height: clamp(15rem, 30vh, 18rem);
         }
 
         .roadmap-stage {
             position: relative;
             z-index: 1;
             display: grid;
-            gap: 0.5rem;
+            gap: 0.65rem;
             align-content: start;
-            padding: clamp(0.95rem, 1.3vw, 1.1rem);
-            border-radius: clamp(1rem, 1.4vw, 1.2rem);
-            background: rgba(255, 255, 255, 0.06);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            min-height: clamp(12rem, 24vh, 14rem);
+            padding: clamp(0.95rem, 1.25vw, 1.1rem);
+            border-radius: clamp(1rem, 1.4vw, 1.25rem);
+            background:
+                linear-gradient(180deg, rgba(255, 255, 255, 0.08), rgba(255, 255, 255, 0.04)),
+                rgba(255, 255, 255, 0.04);
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            min-height: clamp(13.5rem, 27vh, 16rem);
         }
 
         .roadmap-stage::after {
@@ -1015,24 +1025,39 @@
         }
 
         .roadmap-stage h3 {
-            font-size: clamp(1.1rem, 1.7vw, 1.35rem);
-            line-height: 1.08;
+            font-size: clamp(1.08rem, 1.45vw, 1.28rem);
+            line-height: 1.04;
+            max-width: 100%;
+            overflow-wrap: normal;
+            word-break: normal;
+            hyphens: manual;
+            text-wrap: balance;
         }
 
         .roadmap-stage p {
             color: var(--text-secondary);
-            font-size: clamp(0.9rem, 1.18vw, 0.98rem);
-            line-height: 1.36;
+            font-size: clamp(0.96rem, 1.22vw, 1.04rem);
+            line-height: 1.4;
+            max-width: 100%;
+            overflow-wrap: normal;
+            word-break: normal;
+            hyphens: auto;
+            text-wrap: pretty;
+        }
+
+        .roadmap-stage-title {
+            display: block;
         }
 
         .roadmap-arrow {
             display: flex;
             align-items: center;
             justify-content: center;
-            color: rgba(255, 255, 255, 0.35);
-            font-size: clamp(1.4rem, 2.2vw, 2rem);
+            color: rgba(255, 255, 255, 0.45);
+            font-size: clamp(1.7rem, 2.6vw, 2.4rem);
             font-weight: 800;
             line-height: 1;
+            width: clamp(2rem, 2.6vw, 2.6rem);
         }
 
         .footnote {
@@ -1379,17 +1404,17 @@
                         <div class="roadmap-runway">
                             <div class="roadmap-stage">
                                 <div class="roadmap-stage-tag">HC</div>
-                                <h3>Hill Climbing</h3>
+                                <h3><span class="roadmap-stage-title">Hill</span><span class="roadmap-stage-title">Climbing</span></h3>
                                 <p>Move greedily to the best nearby state.</p>
                             </div>
                             <div class="roadmap-stage">
                                 <div class="roadmap-stage-tag">SA</div>
-                                <h3>Simulated Annealing</h3>
+                                <h3><span class="roadmap-stage-title">Simulated</span><span class="roadmap-stage-title">Annealing</span></h3>
                                 <p>Allow some worse moves while temperature is high.</p>
                             </div>
                             <div class="roadmap-stage">
                                 <div class="roadmap-stage-tag">GA</div>
-                                <h3>Genetic Algorithms</h3>
+                                <h3><span class="roadmap-stage-title">Genetic</span><span class="roadmap-stage-title">Algorithms</span></h3>
                                 <p>Evolve many candidate solutions at once.</p>
                             </div>
                         </div>
