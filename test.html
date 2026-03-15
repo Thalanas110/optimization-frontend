@@ -1,0 +1,1727 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Optimization: Hill Climbing, Simulated Annealing, and Genetic Algorithms</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,700;9..144,800&family=Manrope:wght@400;500;700;800&display=swap" rel="stylesheet">
+    <style>
+        /* ===========================================
+           CSS CUSTOM PROPERTIES (THEME)
+           =========================================== */
+        :root {
+            --bg-primary: #08111f;
+            --bg-secondary: #101c31;
+            --bg-panel: rgba(10, 20, 38, 0.76);
+            --bg-panel-strong: rgba(15, 28, 49, 0.92);
+            --text-primary: #f5efe6;
+            --text-secondary: #b9c4d8;
+            --text-muted: #8c98ad;
+            --line: rgba(255, 255, 255, 0.12);
+            --line-strong: rgba(255, 255, 255, 0.22);
+            --hc: #f2a65a;
+            --sa: #7ee0d1;
+            --ga: #f06f9b;
+            --gold: #f3d27a;
+            --shadow: 0 2rem 5rem rgba(0, 0, 0, 0.4);
+            --font-display: 'Fraunces', serif;
+            --font-body: 'Manrope', sans-serif;
+            --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+            --duration-normal: 0.7s;
+        }
+
+        /* ===========================================
+           BASE STYLES
+           =========================================== */
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        html, body {
+            height: 100%;
+            overflow-x: hidden;
+        }
+
+        html {
+            scroll-snap-type: y mandatory;
+            scroll-behavior: smooth;
+            background:
+                radial-gradient(circle at 15% 20%, rgba(242, 166, 90, 0.18), transparent 25%),
+                radial-gradient(circle at 80% 15%, rgba(126, 224, 209, 0.16), transparent 24%),
+                radial-gradient(circle at 70% 80%, rgba(240, 111, 155, 0.12), transparent 28%),
+                linear-gradient(180deg, #08111f 0%, #0c1630 100%);
+        }
+
+        /* ===========================================
+           VIEWPORT FITTING: MANDATORY BASE STYLES
+           Include this ENTIRE file in every presentation.
+           These styles ensure slides fit exactly in the viewport.
+           =========================================== */
+
+        /* 1. Lock html/body to viewport */
+        html, body {
+            height: 100%;
+            overflow-x: hidden;
+        }
+
+        html {
+            scroll-snap-type: y mandatory;
+            scroll-behavior: smooth;
+        }
+
+        /* 2. Each slide = exact viewport height */
+        .slide {
+            width: 100vw;
+            height: 100vh;
+            height: 100dvh;
+            overflow: hidden;
+            scroll-snap-align: start;
+            display: flex;
+            flex-direction: column;
+           position: relative;
+        }
+
+        /* 3. Content container with flex for centering */
+        .slide-content {
+           flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            max-height: 100%;
+            overflow: hidden;
+            padding: var(--slide-padding);
+        }
+
+        /* 4. ALL typography uses clamp() for responsive scaling */
+        :root {
+            --title-size: clamp(2.4rem, 7.4vw, 6.4rem);
+            --h2-size: clamp(1.65rem, 4.4vw, 3.25rem);
+            --h3-size: clamp(1.15rem, 2.8vw, 2rem);
+            --body-size: clamp(0.98rem, 1.85vw, 1.34rem);
+            --small-size: clamp(0.78rem, 1.15vw, 1rem);
+            --slide-padding: clamp(1.2rem, 4.8vw, 4.6rem);
+            --content-gap: clamp(0.75rem, 2.2vw, 2.3rem);
+            --element-gap: clamp(0.35rem, 1vw, 1rem);
+        }
+
+        /* 5. Cards/containers use viewport-relative max sizes */
+        .card, .container, .content-box {
+            max-width: min(90vw, 1000px);
+            max-height: min(80vh, 700px);
+        }
+
+        /* 6. Lists auto-scale with viewport */
+        .feature-list, .bullet-list {
+            gap: clamp(0.4rem, 1vh, 1rem);
+        }
+
+        .feature-list li, .bullet-list li {
+            font-size: var(--body-size);
+            line-height: 1.4;
+        }
+
+        /* 7. Grids adapt to available space */
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(min(100%, 250px), 1fr));
+            gap: clamp(0.5rem, 1.5vw, 1rem);
+        }
+
+        /* 8. Images constrained to viewport */
+        img, .image-container {
+            max-width: 100%;
+            max-height: min(50vh, 400px);
+            object-fit: contain;
+        }
+
+        /* ===========================================
+           RESPONSIVE BREAKPOINTS
+           =========================================== */
+        @media (max-height: 700px) {
+            :root {
+                --slide-padding: clamp(0.75rem, 3vw, 2rem);
+                --content-gap: clamp(0.4rem, 1.5vw, 1rem);
+                --title-size: clamp(1.25rem, 4.5vw, 2.5rem);
+                --h2-size: clamp(1rem, 3vw, 1.75rem);
+            }
+        }
+
+        @media (max-height: 600px) {
+            :root {
+                --slide-padding: clamp(0.5rem, 2.5vw, 1.5rem);
+                --content-gap: clamp(0.3rem, 1vw, 0.75rem);
+                --title-size: clamp(1.1rem, 4vw, 2rem);
+                --body-size: clamp(0.7rem, 1.2vw, 0.95rem);
+            }
+
+            .nav-dots, .keyboard-hint, .decorative {
+                display: none;
+            }
+        }
+
+        @media (max-height: 500px) {
+            :root {
+                --slide-padding: clamp(0.4rem, 2vw, 1rem);
+                --title-size: clamp(1rem, 3.5vw, 1.5rem);
+                --h2-size: clamp(0.9rem, 2.5vw, 1.25rem);
+                --body-size: clamp(0.65rem, 1vw, 0.85rem);
+            }
+        }
+
+        @media (max-width: 600px) {
+            :root {
+                --title-size: clamp(1.25rem, 7vw, 2.5rem);
+            }
+
+            .grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* ===========================================
+           REDUCED MOTION
+           =========================================== */
+        @media (prefers-reduced-motion: reduce) {
+            *, *::before, *::after {
+                animation-duration: 0.01ms !important;
+                transition-duration: 0.2s !important;
+            }
+
+            html {
+                scroll-behavior: auto;
+            }
+        }
+
+        /* ===========================================
+           PRESENTATION CHROME
+           =========================================== */
+        body {
+            color: var(--text-primary);
+            font-family: var(--font-body);
+            text-rendering: optimizeLegibility;
+            -webkit-font-smoothing: antialiased;
+            position: relative;
+        }
+
+        body::before {
+            content: "";
+            position: fixed;
+            inset: 0;
+            pointer-events: none;
+            z-index: 1;
+            opacity: 0.25;
+            background-image:
+                linear-gradient(rgba(255, 255, 255, 0.03) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+            background-size: clamp(36px, 4vw, 52px) clamp(36px, 4vw, 52px);
+        }
+
+        .progress-bar {
+            position: fixed;
+            inset: 0 auto auto 0;
+            z-index: 20;
+            width: 0;
+           height: clamp(0.24rem, 0.55vw, 0.48rem);
+            background: linear-gradient(90deg, var(--hc), var(--sa), var(--ga));
+            box-shadow: 0 0 24px rgba(126, 224, 209, 0.45);
+        }
+
+        .nav-dots {
+            position: fixed;
+            right: clamp(0.8rem, 2vw, 1.8rem);
+            top: 50%;
+            transform: translateY(-50%);
+            z-index: 20;
+            display: grid;
+            gap: clamp(0.35rem, 1vh, 0.8rem);
+        }
+
+        .nav-dot {
+            width: clamp(0.55rem, 1vw, 0.8rem);
+            height: clamp(0.55rem, 1vw, 0.8rem);
+            border-radius: 999px;
+            border: 1px solid rgba(255, 255, 255, 0.45);
+            background: transparent;
+            opacity: 0.55;
+            cursor: pointer;
+            transition: transform 0.25s ease, background 0.25s ease, opacity 0.25s ease;
+        }
+
+        .nav-dot.active {
+            background: var(--gold);
+            border-color: var(--gold);
+            opacity: 1;
+            transform: scale(1.2);
+        }
+
+        /* ===========================================
+           ANIMATIONS
+           =========================================== */
+        .reveal,
+        .reveal-left,
+        .reveal-scale,
+        .reveal-blur {
+            opacity: 0;
+        }
+
+        .reveal {
+            transform: translateY(30px);
+            transition: opacity var(--duration-normal) var(--ease-out-expo),
+                        transform var(--duration-normal) var(--ease-out-expo);
+        }
+
+        .reveal-left {
+            transform: translateX(-40px);
+            transition: opacity var(--duration-normal) var(--ease-out-expo),
+                        transform var(--duration-normal) var(--ease-out-expo);
+        }
+
+        .reveal-scale {
+            transform: scale(0.92);
+            transition: opacity var(--duration-normal) var(--ease-out-expo),
+                        transform var(--duration-normal) var(--ease-out-expo);
+        }
+
+        .reveal-blur {
+            filter: blur(12px);
+            transition: opacity calc(var(--duration-normal) + 0.15s) var(--ease-out-expo),
+                        filter calc(var(--duration-normal) + 0.15s) var(--ease-out-expo);
+        }
+
+        .slide.visible .reveal,
+        .slide.visible .reveal-left,
+        .slide.visible .reveal-scale,
+        .slide.visible .reveal-blur {
+            opacity: 1;
+            transform: none;
+            filter: blur(0);
+        }
+
+        .delay-1 { transition-delay: 0.08s; }
+        .delay-2 { transition-delay: 0.18s; }
+        .delay-3 { transition-delay: 0.28s; }
+        .delay-4 { transition-delay: 0.38s; }
+
+        /* ===========================================
+           SHARED LAYOUT AND COMPONENTS
+           =========================================== */
+        .slide::before,
+        .slide::after {
+            content: "";
+            position: absolute;
+            border-radius: 999px;
+            filter: blur(84px);
+            pointer-events: none;
+            opacity: 0.55;
+        }
+
+        .slide::before {
+            width: clamp(9rem, 24vw, 20rem);
+            height: clamp(9rem, 24vw, 20rem);
+            top: calc(-1 * clamp(3rem, 8vw, 6rem));
+            right: calc(-1 * clamp(2rem, 6vw, 4rem));
+            background: rgba(126, 224, 209, 0.12);
+        }
+
+        .slide::after {
+            width: clamp(8rem, 18vw, 14rem);
+            height: clamp(8rem, 18vw, 14rem);
+            bottom: calc(-1 * clamp(2rem, 5vw, 4rem));
+            left: calc(-1 * clamp(2rem, 4vw, 3rem));
+            background: rgba(242, 166, 90, 0.08);
+        }
+
+        .eyebrow {
+            color: var(--gold);
+            font-size: var(--small-size);
+            font-weight: 800;
+            letter-spacing: 0.18em;
+            text-transform: uppercase;
+        }
+
+        .slide-number {
+            position: absolute;
+            top: clamp(1rem, 3vw, 2rem);
+            left: clamp(1rem, 3vw, 2rem);
+            color: rgba(255, 255, 255, 0.4);
+            font-size: clamp(0.92rem, 1.45vw, 1.12rem);
+            font-weight: 700;
+            letter-spacing: 0.18em;
+            text-transform: uppercase;
+        }
+
+        .heading {
+            font-family: var(--font-display);
+            font-size: var(--title-size);
+            line-height: 0.98;
+            letter-spacing: -0.03em;
+        }
+
+        .section-title {
+            font-family: var(--font-display);
+            font-size: var(--h2-size);
+            line-height: 1.02;
+            letter-spacing: -0.025em;
+        }
+
+        .lede {
+            max-width: min(62ch, 72vw);
+            color: var(--text-secondary);
+            font-size: clamp(1.08rem, 1.95vw, 1.5rem);
+            line-height: 1.5;
+        }
+
+        .frame {
+            width: min(100%, 1180px);
+            margin: 0 auto;
+            display: grid;
+            gap: var(--content-gap);
+        }
+
+        .two-column {
+            grid-template-columns: 1.05fr 0.95fr;
+            align-items: center;
+        }
+
+        .hero-card,
+        .content-card,
+        .comparison-card,
+        .process-card,
+        .mini-card,
+        .stat-card {
+            background:
+                linear-gradient(180deg, rgba(255, 255, 255, 0.05), rgba(255, 255, 255, 0.015)),
+                var(--bg-panel);
+            border: 1px solid var(--line-strong);
+            border-radius: clamp(1rem, 2vw, 2rem);
+            box-shadow: var(--shadow);
+            backdrop-filter: blur(14px);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero-card::before,
+        .content-card::before,
+        .comparison-card::before,
+        .process-card::before,
+        .mini-card::before,
+        .stat-card::before {
+            content: "";
+            position: absolute;
+            inset: 0;
+            pointer-events: none;
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.07), transparent 36%);
+            opacity: 0.9;
+        }
+
+        .hero-card {
+            padding: clamp(1.4rem, 3vw, 2.8rem);
+            display: grid;
+            gap: clamp(1rem, 2vw, 1.7rem);
+            width: min(100%, 1100px);
+            background:
+                radial-gradient(circle at top right, rgba(243, 210, 122, 0.14), transparent 30%),
+                linear-gradient(180deg, rgba(255, 255, 255, 0.06), rgba(255, 255, 255, 0.015)),
+                var(--bg-panel-strong);
+        }
+
+        .hero-meta {
+            display: flex;
+            flex-wrap: wrap;
+            gap: clamp(0.6rem, 1vw, 1rem);
+            color: var(--text-secondary);
+            font-size: var(--small-size);
+        }
+
+        .badge-row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: clamp(0.5rem, 1vw, 0.9rem);
+        }
+
+        .badge {
+            border-radius: 999px;
+            padding: clamp(0.58rem, 0.95vw, 0.84rem) clamp(0.95rem, 1.6vw, 1.3rem);
+            background: rgba(255, 255, 255, 0.09);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            font-size: var(--small-size);
+            color: var(--text-primary);
+        }
+
+        .badge.hc { background: rgba(242, 166, 90, 0.16); border-color: rgba(242, 166, 90, 0.35); }
+        .badge.sa { background: rgba(126, 224, 209, 0.15); border-color: rgba(126, 224, 209, 0.35); }
+        .badge.ga { background: rgba(240, 111, 155, 0.16); border-color: rgba(240, 111, 155, 0.36); }
+
+        .content-card,
+        .comparison-card,
+        .process-card,
+        .stat-card {
+            padding: clamp(1.15rem, 2.2vw, 1.9rem);
+            display: grid;
+            gap: clamp(0.85rem, 1.45vw, 1.2rem);
+        }
+
+        .mini-card {
+            padding: clamp(0.95rem, 1.65vw, 1.25rem);
+            display: grid;
+            gap: clamp(0.35rem, 0.8vw, 0.65rem);
+        }
+
+        .grid-2 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+        .grid-3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+        .grid-4 { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+
+        .bullet-list,
+        .feature-list {
+            list-style: none;
+            display: grid;
+        }
+
+        .bullet-list li,
+        .feature-list li {
+            position: relative;
+            padding-left: clamp(1rem, 1.8vw, 1.4rem);
+            color: var(--text-secondary);
+        }
+
+        .bullet-list li::before,
+        .feature-list li::before {
+            content: "";
+            position: absolute;
+            left: 0;
+            top: 0.55em;
+            width: clamp(0.36rem, 0.6vw, 0.5rem);
+            height: clamp(0.36rem, 0.6vw, 0.5rem);
+            border-radius: 999px;
+            background: currentColor;
+            opacity: 0.85;
+        }
+
+        .accent-hc { color: var(--hc); }
+        .accent-sa { color: var(--sa); }
+        .accent-ga { color: var(--ga); }
+
+        .kicker {
+            color: var(--text-muted);
+            font-size: var(--small-size);
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.12em;
+        }
+
+        .big-number {
+            font-family: var(--font-display);
+            font-size: clamp(2.4rem, 8vw, 6rem);
+            line-height: 0.88;
+        }
+
+        .comparison-columns {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: clamp(0.8rem, 1.5vw, 1.2rem);
+        }
+
+        .timeline {
+            display: grid;
+            grid-template-columns: repeat(5, minmax(0, 1fr));
+            gap: clamp(0.55rem, 1vw, 0.85rem);
+            align-items: end;
+        }
+
+        .timeline-step {
+            min-height: clamp(8rem, 22vh, 12rem);
+            padding: clamp(0.8rem, 1.2vw, 1rem);
+            border-radius: clamp(1rem, 1.5vw, 1.25rem);
+            background: rgba(255, 255, 255, 0.06);
+            border: 1px solid rgba(255, 255, 255, 0.09);
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .landscape {
+            position: relative;
+            min-height: clamp(15rem, 34vh, 21rem);
+            border-radius: clamp(1rem, 2vw, 1.6rem);
+            background:
+                linear-gradient(180deg, rgba(255, 255, 255, 0.08), rgba(255, 255, 255, 0.02)),
+                linear-gradient(135deg, rgba(8, 17, 31, 0.8), rgba(17, 28, 49, 0.9));
+            border: 1px solid var(--line);
+            overflow: hidden;
+        }
+
+        .landscape .ridge,
+        .landscape .peak,
+        .landscape .plateau,
+        .landscape .path {
+            position: absolute;
+        }
+
+        .landscape .ridge {
+            inset: auto 8% 20% 8%;
+            height: 38%;
+            border-radius: 50%;
+            border: 2px solid rgba(255, 255, 255, 0.16);
+            transform: skewX(-12deg);
+        }
+
+        .landscape .plateau {
+            inset: auto 12% 24% auto;
+            width: 24%;
+            height: 12%;
+            border-radius: 999px;
+            background: rgba(242, 166, 90, 0.3);
+        }
+
+        .landscape .peak {
+            width: clamp(1.1rem, 1.8vw, 1.4rem);
+            height: clamp(1.1rem, 1.8vw, 1.4rem);
+            border-radius: 50%;
+            background: var(--gold);
+            box-shadow: 0 0 20px rgba(243, 210, 122, 0.5);
+        }
+
+        .landscape .path {
+            height: 2px;
+            background: linear-gradient(90deg, rgba(126, 224, 209, 0.2), rgba(126, 224, 209, 1));
+            transform-origin: left center;
+        }
+
+        .hill-climbing-slide .frame {
+            gap: clamp(1rem, 2.2vw, 1.8rem);
+        }
+
+        .hc-hero {
+            display: grid;
+            gap: clamp(1rem, 1.8vw, 1.4rem);
+            padding: clamp(1.35rem, 2.6vw, 2.4rem);
+            background:
+                radial-gradient(circle at top right, rgba(242, 166, 90, 0.14), transparent 30%),
+                linear-gradient(180deg, rgba(255, 255, 255, 0.06), rgba(255, 255, 255, 0.015)),
+                var(--bg-panel-strong);
+        }
+
+        .hc-hero-top {
+            display: grid;
+            grid-template-columns: 1.2fr 0.8fr;
+            gap: clamp(1rem, 1.8vw, 1.4rem);
+            align-items: end;
+        }
+
+        .hc-hero-copy {
+            display: grid;
+            gap: clamp(0.65rem, 1.2vw, 1rem);
+        }
+
+        .hc-hero-copy .section-title {
+            max-width: 10ch;
+            font-size: clamp(2rem, 5vw, 4.2rem);
+        }
+
+        .hc-tagline {
+            max-width: 28ch;
+            color: var(--text-secondary);
+            font-size: clamp(1rem, 1.65vw, 1.22rem);
+            line-height: 1.45;
+        }
+
+        .hc-principle {
+            justify-self: end;
+            align-self: stretch;
+            display: grid;
+            gap: 0.5rem;
+            padding: clamp(0.95rem, 1.6vw, 1.2rem);
+            min-width: min(100%, 18rem);
+            border-radius: clamp(1rem, 1.6vw, 1.25rem);
+            background: rgba(255, 255, 255, 0.06);
+            border: 1px solid rgba(255, 255, 255, 0.12);
+        }
+
+        .hc-principle-label {
+            color: var(--hc);
+            font-size: var(--small-size);
+            font-weight: 800;
+            letter-spacing: 0.16em;
+            text-transform: uppercase;
+        }
+
+        .hc-principle strong {
+            font-size: clamp(1.05rem, 1.7vw, 1.35rem);
+            line-height: 1.25;
+        }
+
+        .hc-flow {
+            display: grid;
+            grid-template-columns: repeat(5, minmax(0, 1fr));
+            gap: clamp(0.7rem, 1vw, 0.95rem);
+            align-items: stretch;
+        }
+
+        .hc-step {
+            position: relative;
+            display: grid;
+            gap: clamp(0.55rem, 0.9vw, 0.75rem);
+            align-content: start;
+            min-height: clamp(10.5rem, 24vh, 14rem);
+            padding: clamp(0.95rem, 1.4vw, 1.1rem);
+            border-radius: clamp(1rem, 1.5vw, 1.3rem);
+            background: linear-gradient(180deg, rgba(255, 255, 255, 0.08), rgba(255, 255, 255, 0.04));
+            border: 1px solid rgba(255, 255, 255, 0.11);
+            box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.06);
+        }
+
+        .hc-step::after {
+            content: "→";
+            position: absolute;
+            top: 50%;
+            right: calc(-1 * clamp(0.75rem, 1vw, 0.95rem));
+            transform: translateY(-50%);
+            color: rgba(255, 255, 255, 0.28);
+            font-size: clamp(1.15rem, 1.9vw, 1.6rem);
+            font-weight: 700;
+        }
+
+        .hc-step:last-child::after {
+            display: none;
+        }
+
+        .hc-step-num {
+            width: clamp(2rem, 2.6vw, 2.4rem);
+            height: clamp(2rem, 2.6vw, 2.4rem);
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 999px;
+            background: rgba(242, 166, 90, 0.14);
+            border: 1px solid rgba(242, 166, 90, 0.3);
+            color: var(--hc);
+            font-weight: 800;
+            font-size: clamp(0.9rem, 1.25vw, 1.05rem);
+        }
+
+        .hc-step h3 {
+            font-size: clamp(1.15rem, 1.9vw, 1.45rem);
+            line-height: 1.1;
+        }
+
+        .hc-step p {
+            color: var(--text-secondary);
+            font-size: clamp(0.94rem, 1.35vw, 1.08rem);
+            line-height: 1.4;
+        }
+
+        .hc-benefits {
+            display: grid;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            gap: clamp(0.75rem, 1vw, 0.95rem);
+        }
+
+        .hc-benefit {
+            display: grid;
+            gap: 0.35rem;
+            padding: clamp(0.85rem, 1.3vw, 1rem);
+            border-radius: clamp(0.95rem, 1.4vw, 1.1rem);
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .hc-benefit strong {
+            font-size: clamp(1rem, 1.45vw, 1.18rem);
+        }
+
+        .hc-benefit p {
+            color: var(--text-secondary);
+            font-size: clamp(0.9rem, 1.2vw, 1rem);
+            line-height: 1.4;
+        }
+
+        .storey-stack {
+            display: grid;
+            align-items: end;
+            gap: clamp(0.7rem, 1vw, 1rem);
+        }
+
+        .agenda-stack {
+            grid-template-columns: repeat(4, minmax(0, 1fr));
+            min-height: clamp(22rem, 52vh, 30rem);
+        }
+
+        .hc-storey-stack {
+            grid-template-columns: repeat(5, minmax(0, 1fr));
+            min-height: clamp(18rem, 38vh, 23rem);
+        }
+
+        .storey-card {
+            position: relative;
+            display: grid;
+            align-content: start;
+            gap: clamp(0.55rem, 1vw, 0.85rem);
+            padding: clamp(1rem, 1.5vw, 1.2rem);
+            border-radius: clamp(1rem, 1.6vw, 1.4rem);
+            border: 1px solid rgba(255, 255, 255, 0.14);
+            background:
+                linear-gradient(180deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.04)),
+                rgba(10, 20, 38, 0.88);
+            box-shadow: 0 1.4rem 3rem rgba(0, 0, 0, 0.28);
+            overflow: hidden;
+        }
+
+        .storey-card::before {
+            content: "";
+            position: absolute;
+            inset: 0;
+            pointer-events: none;
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.08), transparent 42%);
+        }
+
+        .storey-num {
+            width: clamp(2rem, 2.3vw, 2.4rem);
+            height: clamp(2rem, 2.3vw, 2.4rem);
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 999px;
+            font-size: clamp(0.9rem, 1.15vw, 1rem);
+            font-weight: 800;
+            background: rgba(255, 255, 255, 0.08);
+            border: 1px solid rgba(255, 255, 255, 0.12);
+        }
+
+        .storey-card h3 {
+            font-size: clamp(1.12rem, 1.75vw, 1.38rem);
+            line-height: 1.08;
+        }
+
+        .storey-card p,
+        .storey-card li {
+            color: var(--text-secondary);
+            font-size: clamp(0.92rem, 1.2vw, 1rem);
+            line-height: 1.35;
+        }
+
+        .storey-card ul {
+            list-style: none;
+            display: grid;
+            gap: 0.45rem;
+        }
+
+        .storey-card li {
+            position: relative;
+            padding-left: 0.9rem;
+        }
+
+        .storey-card li::before {
+            content: "";
+            position: absolute;
+            left: 0;
+            top: 0.5em;
+            width: 0.38rem;
+            height: 0.38rem;
+            border-radius: 999px;
+            background: currentColor;
+            opacity: 0.85;
+        }
+
+        .agenda-storey-1 { min-height: 58%; }
+        .agenda-storey-2 { min-height: 72%; }
+        .agenda-storey-3 { min-height: 84%; }
+        .agenda-storey-4 { min-height: 96%; }
+
+        .hc-storey-1 { min-height: 54%; }
+        .hc-storey-2 { min-height: 64%; }
+        .hc-storey-3 { min-height: 74%; }
+        .hc-storey-4 { min-height: 84%; }
+        .hc-storey-5 { min-height: 94%; }
+
+        .storey-card.hc-theme .storey-num,
+        .storey-card.agenda-hc .storey-num {
+            color: var(--hc);
+            background: rgba(242, 166, 90, 0.14);
+            border-color: rgba(242, 166, 90, 0.32);
+        }
+
+        .storey-card.agenda-sa .storey-num {
+            color: var(--sa);
+            background: rgba(126, 224, 209, 0.14);
+            border-color: rgba(126, 224, 209, 0.32);
+        }
+
+        .storey-card.agenda-ga .storey-num {
+            color: var(--ga);
+            background: rgba(240, 111, 155, 0.14);
+            border-color: rgba(240, 111, 155, 0.32);
+        }
+
+        .footnote {
+            color: var(--text-muted);
+            font-size: var(--small-size);
+            line-height: 1.5;
+        }
+
+        .source-line {
+            padding-top: clamp(0.6rem, 1vw, 0.9rem);
+            border-top: 1px solid rgba(255, 255, 255, 0.12);
+        }
+
+        .formula-chip {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.55rem;
+            width: fit-content;
+            padding: clamp(0.7rem, 1vw, 0.9rem) clamp(0.95rem, 1.5vw, 1.2rem);
+            border-radius: 999px;
+            background: rgba(126, 224, 209, 0.14);
+            border: 1px solid rgba(126, 224, 209, 0.3);
+            color: var(--text-primary);
+            font-size: clamp(0.85rem, 1.3vw, 1rem);
+            font-weight: 700;
+        }
+
+        .hero-quote {
+            font-family: var(--font-display);
+            font-size: clamp(1.65rem, 3.8vw, 3.1rem);
+            line-height: 1.05;
+            max-width: 16ch;
+        }
+
+        .recommendation-strip {
+            display: grid;
+            grid-template-columns: 1.1fr 0.9fr;
+            gap: clamp(0.75rem, 1.5vw, 1rem);
+        }
+
+        .center-stack {
+            align-items: center;
+            text-align: center;
+            justify-items: center;
+        }
+
+        .matrix {
+            display: grid;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            gap: clamp(0.75rem, 1.2vw, 1rem);
+        }
+
+        .chip-line {
+            display: flex;
+            flex-wrap: wrap;
+            gap: clamp(0.45rem, 0.8vw, 0.7rem);
+        }
+
+        .tiny-chip {
+            padding: 0.55rem 0.9rem;
+            border-radius: 999px;
+            background: rgba(255, 255, 255, 0.08);
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            color: var(--text-secondary);
+            font-size: var(--small-size);
+        }
+
+        @media (max-width: 900px) {
+            .two-column,
+            .comparison-columns,
+            .grid-4,
+            .recommendation-strip,
+            .matrix,
+            .hc-hero-top,
+            .hc-benefits,
+            .agenda-stack {
+                grid-template-columns: 1fr;
+            }
+
+            .grid-3,
+            .grid-2,
+            .timeline,
+            .hc-flow,
+            .hc-storey-stack {
+                grid-template-columns: repeat(2, minmax(0, 1fr));
+            }
+        }
+
+        @media (max-width: 640px) {
+            .grid-3,
+            .grid-2,
+            .timeline,
+            .hc-flow,
+            .hc-benefits,
+            .hc-storey-stack,
+            .agenda-stack {
+                grid-template-columns: 1fr;
+            }
+
+            .nav-dots {
+                right: 0.55rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="progress-bar" aria-hidden="true"></div>
+    <nav class="nav-dots" aria-label="Slide navigation"></nav>
+
+    <!-- ===========================================
+         SLIDE 1: TITLE
+         =========================================== -->
+    <section class="slide title-slide">
+       <div class="slide-number">01 / 19</div>
+        <div class="slide-content">
+            <div class="frame">
+                <div class="hero-card reveal-scale">
+                    <div class="eyebrow reveal">Optimization Algorithms</div>
+                    <h1 class="heading reveal delay-1">Hill Climbing, Simulated Annealing, and Genetic Algorithms</h1>
+                    <p class="lede reveal delay-2">Three optimization strategies, one shared goal: search huge problem spaces efficiently without checking every possibility.</p>
+                    <div class="badge-row reveal delay-3">
+                        <span class="badge hc">Hill Climbing</span>
+                        <span class="badge sa">Simulated Annealing</span>
+                        <span class="badge ga">Genetic Algorithms</span>
+                    </div>
+                    <div class="hero-meta reveal delay-4">
+                        <span>Presented by Group 4</span>
+                        <span>Alvarez, Aquino, Aratea, Batallones, Dimate, Norial, Reyes</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ===========================================
+         SLIDE 2: AGENDA
+         =========================================== -->
+    <section class="slide agenda-slide">
+        <div class="slide-number">02 / 19</div>
+        <div class="slide-content">
+            <div class="frame">
+                <div class="eyebrow reveal">Roadmap</div>
+                <div class="storey-stack agenda-stack">
+                    <article class="storey-card agenda-hc agenda-storey-1 reveal-left">
+                        <span class="storey-num">1</span>
+                        <div class="kicker accent-hc">Part I</div>
+                        <h3>Local search basics</h3>
+                        <ul>
+                            <li>Optimization as local improvement</li>
+                            <li>Good enough beats exhaustive</li>
+                        </ul>
+                    </article>
+                    <article class="storey-card agenda-hc agenda-storey-2 reveal-left delay-1">
+                        <span class="storey-num">2</span>
+                        <div class="kicker accent-hc">Part II</div>
+                        <h3>Hill Climbing</h3>
+                        <ul>
+                            <li>Greedy uphill movement</li>
+                            <li>Problems and variants</li>
+                        </ul>
+                    </article>
+                    <article class="storey-card agenda-sa agenda-storey-3 reveal-left delay-2">
+                        <span class="storey-num">3</span>
+                        <div class="kicker accent-sa">Part III</div>
+                        <h3>Simulated Annealing</h3>
+                        <ul>
+                            <li>Temperature-driven search</li>
+                            <li>Exploration then exploitation</li>
+                        </ul>
+                    </article>
+                    <article class="storey-card agenda-ga agenda-storey-4 reveal-left delay-3">
+                        <span class="storey-num">4</span>
+                        <div class="kicker accent-ga">Part IV</div>
+                        <h3>Genetic Algorithms</h3>
+                        <ul>
+                            <li>Population-based evolution</li>
+                            <li>When to use each method</li>
+                        </ul>
+                    </article>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ===========================================
+         SLIDE 3: OPTIMIZATION OVERVIEW
+         =========================================== -->
+    <section class="slide optimization-slide">
+        <div class="slide-number">03 / 19</div>
+        <div class="slide-content">
+            <div class="frame two-column">
+                <div class="content-card reveal">
+                    <div class="eyebrow">Optimization / Local Search</div>
+                    <h2 class="section-title">Start somewhere. Improve nearby. Stop when improvement gets hard.</h2>
+                    <ul class="bullet-list">
+                        <li>Begin with an initial solution, often random or heuristic.</li>
+                        <li>Evaluate nearby alternatives instead of searching the entire space.</li>
+                        <li>Iteratively move toward a better solution.</li>
+                        <li>Prioritize speed and practicality over guaranteed optimality.</li>
+                    </ul>
+                </div>
+                <div class="comparison-card reveal delay-2">
+                    <div class="kicker">Optimization vs Systematic Search</div>
+                    <div class="comparison-columns">
+                        <div class="mini-card">
+                            <h3 class="accent-hc">Systematic search</h3>
+                            <p class="footnote">Explores many possibilities exhaustively. Higher confidence, much higher cost.</p>
+                        </div>
+                        <div class="mini-card">
+                            <h3 class="accent-sa">Optimization</h3>
+                            <p class="footnote">Searches strategically for strong solutions fast. Lower certainty, better scalability.</p>
+                        </div>
+                    </div>
+                    <div class="hero-quote">Optimization is about finding a very good answer before time or complexity runs out.</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ===========================================
+         SLIDE 4: HILL CLIMBING
+         =========================================== -->
+    <section class="slide hill-climbing-slide">
+        <div class="slide-number">04 / 19</div>
+        <div class="slide-content">
+            <div class="frame">
+                <div class="eyebrow reveal accent-hc">Hill Climbing</div>
+                <article class="hero-card hc-hero reveal-scale">
+                    <div class="hc-hero-top">
+                        <div class="hc-hero-copy">
+                            <h2 class="section-title">Greedy local improvement</h2>
+                            <p class="hc-tagline">Always take the best immediate uphill move, then repeat until the search cannot improve anymore.</p>
+                        </div>
+                        <div class="hc-principle">
+                            <span class="hc-principle-label">Core rule</span>
+                            <strong>One solution. One neighborhood. One best next step.</strong>
+                            <p class="footnote">Fast and intuitive, but limited by what the current path can see.</p>
+                        </div>
+                    </div>
+                    <div class="storey-stack hc-storey-stack">
+                        <div class="storey-card hc-theme hc-storey-1 reveal delay-1">
+                            <span class="storey-num">1</span>
+                            <h3>Start</h3>
+                            <p>Pick an initial state to begin the search.</p>
+                        </div>
+                        <div class="storey-card hc-theme hc-storey-2 reveal delay-1">
+                            <span class="storey-num">2</span>
+                            <h3>Inspect</h3>
+                            <p>Evaluate the neighboring states around it.</p>
+                        </div>
+                        <div class="storey-card hc-theme hc-storey-3 reveal delay-2">
+                            <span class="storey-num">3</span>
+                            <h3>Move</h3>
+                            <p>Choose the best improving neighbor.</p>
+                        </div>
+                        <div class="storey-card hc-theme hc-storey-4 reveal delay-2">
+                            <span class="storey-num">4</span>
+                            <h3>Repeat</h3>
+                            <p>Keep climbing while the value improves.</p>
+                        </div>
+                        <div class="storey-card hc-theme hc-storey-5 reveal delay-3">
+                            <span class="storey-num">5</span>
+                            <h3>Stop</h3>
+                            <p>End when no neighbor offers a better move.</p>
+                        </div>
+                    </div>
+                    <div class="hc-benefits">
+                        <div class="hc-benefit reveal delay-2">
+                            <strong>Simple</strong>
+                            <p>Easy to explain, code, and reason about.</p>
+                        </div>
+                        <div class="hc-benefit reveal delay-3">
+                            <strong>Fast</strong>
+                            <p>Works well on small or smooth search spaces.</p>
+                        </div>
+                        <div class="hc-benefit reveal delay-4">
+                            <strong>Greedy</strong>
+                            <p>Chooses the best visible move, which is why it can miss the global optimum.</p>
+                        </div>
+                    </div>
+                </article>
+            </div>
+        </div>
+    </section>
+
+    <!-- ===========================================
+         SLIDE 5: HILL CLIMBING PROBLEMS
+         =========================================== -->
+    <section class="slide hill-problems-slide">
+        <div class="slide-number">05 / 19</div>
+        <div class="slide-content">
+            <div class="frame">
+                <div class="eyebrow reveal accent-hc">Hill Climbing Problems and Variants</div>
+                <div class="grid grid-3">
+                    <article class="content-card reveal">
+                        <h2 class="section-title">Why it gets stuck</h2>
+                        <ul class="bullet-list">
+                            <li><span class="accent-hc">Local optima:</span> a peak that is good, but not best.</li>
+                            <li><span class="accent-hc">Plateaus:</span> flat regions with no clear uphill move.</li>
+                            <li><span class="accent-hc">Ridges:</span> narrow improvement paths that greedy steps miss.</li>
+                        </ul>
+                    </article>
+                    <article class="content-card reveal delay-1">
+                        <h2 class="section-title">Variants</h2>
+                        <div class="chip-line">
+                            <span class="tiny-chip">Steepest-ascent: evaluate all neighbors</span>
+                            <span class="tiny-chip">First-choice: take the first improvement</span>
+                            <span class="tiny-chip">Stochastic: pick among improving moves randomly</span>
+                            <span class="tiny-chip">Random-restart: try many different starting points</span>
+                        </div>
+                    </article>
+                    <article class="landscape reveal-scale delay-2">
+                        <div class="ridge"></div>
+                        <div class="plateau"></div>
+                        <div class="peak" style="left: 28%; bottom: 38%;"></div>
+                        <div class="peak" style="left: 62%; bottom: 56%;"></div>
+                        <div class="path" style="left: 20%; bottom: 44%; width: 16%; transform: rotate(14deg);"></div>
+                        <div class="path" style="left: 48%; bottom: 46%; width: 14%; transform: rotate(36deg);"></div>
+                    </article>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ===========================================
+         SLIDE 6: SIMULATED ANNEALING
+         =========================================== -->
+    <section class="slide sa-intro-slide">
+        <div class="slide-number">06 / 19</div>
+        <div class="slide-content">
+            <div class="frame two-column">
+                <div class="hero-card reveal-scale">
+                    <div class="eyebrow accent-sa">Simulated Annealing</div>
+                    <h2 class="section-title">A smarter search because it sometimes accepts worse moves on purpose.</h2>
+                    <p class="lede">That “bad move” is not a mistake. It is a temporary gamble that helps the algorithm escape local optima and explore somewhere better.</p>
+                    <div class="formula-chip">Key idea: controlled randomness instead of pure greed</div>
+                </div>
+                <div class="comparison-card reveal delay-2">
+                    <div class="hero-quote">Early in the search, it is curious. Later in the search, it becomes selective.</div>
+                    <p class="footnote">The method is inspired by annealing in metallurgy, where materials are heated and cooled to settle into lower-energy states.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ===========================================
+         SLIDE 7: METALLURGY
+         =========================================== -->
+    <section class="slide metallurgy-slide">
+        <div class="slide-number">07 / 19</div>
+        <div class="slide-content">
+            <div class="frame">
+                <div class="eyebrow reveal accent-sa">Metallurgy Analogy</div>
+                <div class="grid grid-4">
+                    <article class="stat-card reveal">
+                        <div class="big-number accent-sa">Hot</div>
+                        <h3>High temperature</h3>
+                        <p class="footnote">Atoms move freely. Search explores many random directions.</p>
+                    </article>
+                    <article class="stat-card reveal delay-1">
+                        <div class="big-number accent-sa">Mix</div>
+                        <h3>Worse moves allowed</h3>
+                        <p class="footnote">Escapes traps by sometimes stepping away from the current best state.</p>
+                    </article>
+                    <article class="stat-card reveal delay-2">
+                        <div class="big-number accent-sa">Cool</div>
+                        <h3>Temperature drops</h3>
+                        <p class="footnote">Randomness decreases through a cooling schedule.</p>
+                    </article>
+                    <article class="stat-card reveal delay-3">
+                        <div class="big-number accent-sa">Settle</div>
+                        <h3>Stable solution</h3>
+                        <p class="footnote">The algorithm focuses near strong candidates and becomes more greedy.</p>
+                    </article>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ===========================================
+         SLIDE 8: ACCEPTANCE RULE
+         =========================================== -->
+    <section class="slide acceptance-slide">
+        <div class="slide-number">08 / 19</div>
+        <div class="slide-content">
+            <div class="frame two-column">
+                <div class="process-card reveal-left">
+                    <div class="eyebrow accent-sa">Acceptance of Worse Solutions</div>
+                    <h2 class="section-title">Better moves are always accepted. Worse moves are accepted with a probability.</h2>
+                    <div class="formula-chip">P = e^(ΔE / T)</div>
+                    <ul class="bullet-list">
+                        <li><strong>f(s')</strong> measures the new state.</li>
+                        <li><strong>f(s)</strong> measures the current state.</li>
+                        <li><strong>T</strong> controls how willing the algorithm is to take risk.</li>
+                    </ul>
+                </div>
+                <div class="comparison-card reveal-left delay-2">
+                    <h3 class="accent-sa">What this changes</h3>
+                    <ul class="bullet-list">
+                        <li>Hill Climbing says “never go down.”</li>
+                        <li>Simulated Annealing says “go down sometimes if it may help you reach a better hill.”</li>
+                        <li>The lower the temperature, the harder it is for a worse move to be accepted.</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ===========================================
+         SLIDE 9: EXPLORATION VS EXPLOITATION
+         =========================================== -->
+    <section class="slide temp-slide">
+        <div class="slide-number">09 / 19</div>
+        <div class="slide-content">
+            <div class="frame">
+                <div class="eyebrow reveal accent-sa">Exploration vs Exploitation</div>
+                <div class="comparison-columns">
+                    <article class="comparison-card reveal">
+                        <div class="kicker accent-sa">High Temperature</div>
+                        <h2 class="section-title">Exploration</h2>
+                        <ul class="bullet-list">
+                            <li>Worse moves are accepted more often.</li>
+                            <li>The search spreads across more regions.</li>
+                            <li>Useful for escaping local optima early.</li>
+                        </ul>
+                    </article>
+                    <article class="comparison-card reveal delay-2">
+                        <div class="kicker accent-hc">Low Temperature</div>
+                        <h2 class="section-title">Exploitation</h2>
+                        <ul class="bullet-list">
+                            <li>Worse moves become unlikely.</li>
+                            <li>The algorithm behaves more like Hill Climbing.</li>
+                            <li>Useful for refining strong candidates late in the run.</li>
+                        </ul>
+                    </article>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ===========================================
+         SLIDE 10: GA OVERVIEW
+         =========================================== -->
+    <section class="slide ga-overview-slide">
+        <div class="slide-number">10 / 19</div>
+        <div class="slide-content">
+            <div class="frame two-column">
+                <div class="hero-card reveal-scale">
+                    <div class="eyebrow accent-ga">Genetic Algorithms</div>
+                    <h2 class="section-title">Instead of improving one solution, evolve many candidate solutions together.</h2>
+                    <p class="lede">Genetic Algorithms borrow the logic of natural evolution: keep better candidates, combine them, mutate them, and repeat across generations.</p>
+                </div>
+                <div class="grid grid-2 reveal delay-2">
+                    <article class="mini-card">
+                        <h3 class="accent-ga">Population</h3>
+                        <p class="footnote">A set of possible solutions.</p>
+                    </article>
+                    <article class="mini-card">
+                        <h3 class="accent-ga">Fitness</h3>
+                        <p class="footnote">A score telling how good each solution is.</p>
+                    </article>
+                    <article class="mini-card">
+                        <h3 class="accent-ga">Selection</h3>
+                        <p class="footnote">Prefer stronger candidates for reproduction.</p>
+                    </article>
+                    <article class="mini-card">
+                        <h3 class="accent-ga">Generations</h3>
+                        <p class="footnote">Repeat the cycle until a good stopping point.</p>
+                    </article>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ===========================================
+         SLIDE 11: GA OPERATORS
+         =========================================== -->
+    <section class="slide ga-operators-slide">
+        <div class="slide-number">11 / 19</div>
+        <div class="slide-content">
+            <div class="frame">
+                <div class="eyebrow reveal accent-ga">Selection, Crossover, Mutation, Generations</div>
+                <div class="matrix">
+                    <article class="content-card reveal">
+                        <h2 class="section-title">Selection</h2>
+                        <p class="footnote">Solutions with higher fitness are more likely to pass their traits forward.</p>
+                    </article>
+                    <article class="content-card reveal delay-1">
+                        <h2 class="section-title">Crossover</h2>
+                        <p class="footnote">New solutions inherit useful characteristics from parent solutions.</p>
+                    </article>
+                    <article class="content-card reveal delay-2">
+                        <h2 class="section-title">Mutation</h2>
+                        <p class="footnote">Random changes keep diversity alive and prevent premature convergence.</p>
+                    </article>
+                </div>
+                <div class="process-card reveal delay-3">
+                    <div class="hero-quote">Evaluate → Select → Recombine → Mutate → Repeat</div>
+                    <p class="footnote">A generation is one full evolutionary cycle. More generations mean more chances to discover strong combinations.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ===========================================
+         SLIDE 12: SINGLE-POINT SEARCH
+         =========================================== -->
+    <section class="slide single-point-slide">
+        <div class="slide-number">12 / 19</div>
+        <div class="slide-content">
+            <div class="frame">
+                <div class="eyebrow reveal">Search Style Comparison</div>
+                <div class="comparison-card reveal-scale">
+                    <div class="kicker accent-hc">Hill Climbing / Simulated Annealing</div>
+                    <h2 class="section-title">Single-point search</h2>
+                    <div class="recommendation-strip">
+                        <ul class="bullet-list">
+                            <li>Start from one solution.</li>
+                            <li>Move through neighboring states step by step.</li>
+                            <li>Exploration depends on the path that one solution takes.</li>
+                        </ul>
+                        <div class="chip-line">
+                            <span class="tiny-chip">HC: always take the better neighbor</span>
+                            <span class="tiny-chip">SA: sometimes accept worse moves</span>
+                            <span class="tiny-chip">Lower memory cost</span>
+                            <span class="tiny-chip">Can be trapped by local structure</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ===========================================
+         SLIDE 13: POPULATION SEARCH
+         =========================================== -->
+    <section class="slide population-slide">
+        <div class="slide-number">13 / 19</div>
+        <div class="slide-content">
+            <div class="frame">
+                <div class="comparison-card reveal-scale">
+                    <div class="kicker accent-ga">Genetic Algorithms</div>
+                    <h2 class="section-title">Population-based search</h2>
+                    <div class="recommendation-strip">
+                        <ul class="bullet-list">
+                            <li>Maintain many candidate solutions at once.</li>
+                            <li>Search several regions of the space in parallel.</li>
+                            <li>Combine strong traits instead of improving only one path.</li>
+                        </ul>
+                        <div class="chip-line">
+                            <span class="tiny-chip">Wider exploration</span>
+                            <span class="tiny-chip">More robust to local traps</span>
+                            <span class="tiny-chip">Higher computational cost</span>
+                            <span class="tiny-chip">Needs parameter tuning</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ===========================================
+         SLIDE 14: EXPLORER METAPHOR
+         =========================================== -->
+    <section class="slide explorers-slide">
+        <div class="slide-number">14 / 19</div>
+        <div class="slide-content">
+            <div class="frame two-column">
+                <div class="landscape reveal">
+                    <div class="ridge"></div>
+                    <div class="peak" style="left: 34%; bottom: 42%;"></div>
+                    <div class="path" style="left: 17%; bottom: 32%; width: 19%; transform: rotate(24deg);"></div>
+                </div>
+                <div class="comparison-card reveal delay-2">
+                    <div class="eyebrow">Mental Picture</div>
+                    <h2 class="section-title">HC/SA is one explorer. GA is many explorers.</h2>
+                    <ul class="bullet-list">
+                        <li><span class="accent-hc">HC/SA:</span> one explorer climbs a landscape, adapting as it moves.</li>
+                        <li><span class="accent-ga">GA:</span> many explorers search different regions at the same time.</li>
+                        <li>The more rugged the landscape, the more valuable population-based exploration becomes.</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ===========================================
+         SLIDE 15: WHEN TO USE HC
+         =========================================== -->
+    <section class="slide when-hc-slide">
+        <div class="slide-number">15 / 19</div>
+        <div class="slide-content">
+            <div class="frame">
+                <div class="eyebrow reveal accent-hc">When to Use Hill Climbing</div>
+                <div class="grid grid-3">
+                    <article class="content-card reveal">
+                        <h2 class="section-title">Use it when...</h2>
+                        <ul class="bullet-list">
+                            <li>The search space is relatively small.</li>
+                            <li>You need a simple and very fast method.</li>
+                            <li>The landscape does not contain many deceptive local optima.</li>
+                        </ul>
+                    </article>
+                    <article class="content-card reveal delay-1">
+                        <h2 class="section-title">Advantages</h2>
+                        <ul class="bullet-list">
+                            <li>Easy to implement</li>
+                            <li>Low computational overhead</li>
+                            <li>Good baseline algorithm</li>
+                        </ul>
+                    </article>
+                    <article class="content-card reveal delay-2">
+                        <h2 class="section-title">Main limitation</h2>
+                        <div class="hero-quote">It can stop early at the wrong peak.</div>
+                    </article>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ===========================================
+         SLIDE 16: WHEN TO USE SA
+         =========================================== -->
+    <section class="slide when-sa-slide">
+        <div class="slide-number">16 / 19</div>
+        <div class="slide-content">
+            <div class="frame">
+                <div class="eyebrow reveal accent-sa">When to Use Simulated Annealing</div>
+                <div class="grid grid-3">
+                    <article class="content-card reveal">
+                        <h2 class="section-title">Use it when...</h2>
+                        <ul class="bullet-list">
+                            <li>The search space is large.</li>
+                            <li>There are many local optima.</li>
+                            <li>You need better exploration than Hill Climbing can offer.</li>
+                        </ul>
+                    </article>
+                    <article class="content-card reveal delay-1">
+                        <h2 class="section-title">Key strength</h2>
+                        <div class="hero-quote">It can temporarily get worse in order to eventually get better.</div>
+                    </article>
+                    <article class="content-card reveal delay-2">
+                        <h2 class="section-title">Typical problems</h2>
+                        <ul class="bullet-list">
+                            <li>Traveling Salesman Problem</li>
+                            <li>Scheduling and timetabling</li>
+                        </ul>
+                    </article>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ===========================================
+         SLIDE 17: WHEN TO USE GA
+         =========================================== -->
+    <section class="slide when-ga-slide">
+        <div class="slide-number">17 / 19</div>
+        <div class="slide-content">
+            <div class="frame">
+                <div class="eyebrow reveal accent-ga">When to Use Genetic Algorithms</div>
+                <div class="grid grid-3">
+                    <article class="content-card reveal">
+                        <h2 class="section-title">Use it when...</h2>
+                        <ul class="bullet-list">
+                            <li>The problem is very complex.</li>
+                            <li>The search space is huge and rugged.</li>
+                            <li>Exploring many candidate solutions is more valuable than refining one path.</li>
+                        </ul>
+                    </article>
+                    <article class="content-card reveal delay-1">
+                        <h2 class="section-title">Advantages</h2>
+                        <ul class="bullet-list">
+                            <li>Explores many regions at once</li>
+                            <li>Less likely to get trapped by local optima</li>
+                            <li>Works well for highly combinational problems</li>
+                        </ul>
+                    </article>
+                    <article class="content-card reveal delay-2">
+                        <h2 class="section-title">Trade-offs</h2>
+                        <ul class="bullet-list">
+                            <li>Slower and more computationally expensive</li>
+                            <li>Needs tuning for population size and mutation rate</li>
+                            <li>Useful in engineering design, ML tuning, and drug discovery</li>
+                        </ul>
+                    </article>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ===========================================
+         SLIDE 18: CONCLUSION
+         =========================================== -->
+    <section class="slide conclusion-slide">
+        <div class="slide-number">18 / 19</div>
+        <div class="slide-content">
+            <div class="frame">
+                <div class="comparison-card reveal-scale">
+                    <div class="eyebrow">Conclusion</div>
+                    <h2 class="section-title">Choose the algorithm that matches the search landscape.</h2>
+                    <div class="grid grid-3">
+                        <article class="mini-card">
+                            <h3 class="accent-hc">Hill Climbing</h3>
+                            <p class="footnote">Best when you need speed, simplicity, and the landscape is not too deceptive.</p>
+                        </article>
+                        <article class="mini-card">
+                            <h3 class="accent-sa">Simulated Annealing</h3>
+                            <p class="footnote">Best when local traps are common and some controlled randomness can help.</p>
+                        </article>
+                        <article class="mini-card">
+                            <h3 class="accent-ga">Genetic Algorithms</h3>
+                            <p class="footnote">Best when the problem is large, complex, and benefits from parallel exploration.</p>
+                        </article>
+                    </div>
+                    <div class="source-line footnote">Source reference from the original deck: Kuznetsov, <em>Intelligent Systems: From Theory to Applications</em>.</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ===========================================
+         SLIDE 19: THANK YOU
+         =========================================== -->
+    <section class="slide thank-you-slide">
+        <div class="slide-number">19 / 19</div>
+        <div class="slide-content">
+            <div class="frame center-stack">
+                <div class="hero-card reveal-scale center-stack">
+                    <div class="eyebrow">Thank You</div>
+                    <h2 class="heading">Questions, comparisons, or clarifications?</h2>
+                    <p class="lede">Optimization is not just about finding the best answer. It is about choosing the right search behavior for the problem you face.</p>
+                    <div class="badge-row">
+                        <span class="badge hc">Fast</span>
+                        <span class="badge sa">Adaptive</span>
+                        <span class="badge ga">Exploratory</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <script>
+        /* ===========================================
+           SLIDE PRESENTATION CONTROLLER
+           =========================================== */
+        class SlidePresentation {
+            constructor() {
+                this.slides = Array.from(document.querySelectorAll('.slide'));
+                this.progressBar = document.querySelector('.progress-bar');
+                this.navDots = document.querySelector('.nav-dots');
+                this.currentSlide = 0;
+                this.touchStartY = 0;
+                this.isAnimating = false;
+                this.buildNavDots();
+                this.setupIntersectionObserver();
+                this.setupKeyboardNav();
+                this.setupWheelNav();
+                this.setupTouchNav();
+                this.setupProgressBar();
+                this.updateUI(0);
+            }
+
+            buildNavDots() {
+                this.slides.forEach((slide, index) => {
+                    const dot = document.createElement('button');
+                    dot.className = 'nav-dot';
+                    dot.type = 'button';
+                    dot.setAttribute('aria-label', `Go to slide ${index + 1}`);
+                    dot.addEventListener('click', () => this.goToSlide(index));
+                    this.navDots.appendChild(dot);
+                });
+            }
+
+            setupIntersectionObserver() {
+                const observer = new IntersectionObserver((entries) => {
+                    entries.forEach((entry) => {
+                        if (entry.isIntersecting) {
+                            entry.target.classList.add('visible');
+                            const index = this.slides.indexOf(entry.target);
+                            if (index >= 0) {
+                                this.updateUI(index);
+                            }
+                        }
+                    });
+                }, { threshold: 0.58 });
+
+                this.slides.forEach((slide) => observer.observe(slide));
+            }
+
+            setupKeyboardNav() {
+                document.addEventListener('keydown', (event) => {
+                   if (['ArrowDown', 'PageDown', ' ', 'ArrowRight'].includes(event.key)) {
+                        event.preventDefault();
+                        this.goToSlide(Math.min(this.currentSlide + 1, this.slides.length - 1));
+                    }
+                    if (['ArrowUp', 'PageUp', 'ArrowLeft'].includes(event.key)) {
+                        event.preventDefault();
+                        this.goToSlide(Math.max(this.currentSlide - 1, 0));
+                    }
+                    if (event.key === 'Home') {
+                        event.preventDefault();
+                        this.goToSlide(0);
+                    }
+                    if (event.key === 'End') {
+                        event.preventDefault();
+                        this.goToSlide(this.slides.length - 1);
+                    }
+                });
+            }
+
+            setupWheelNav() {
+                let wheelTimeout = null;
+                window.addEventListener('wheel', (event) => {
+                    if (Math.abs(event.deltaY) < 30 || this.isAnimating) return;
+                    clearTimeout(wheelTimeout);
+                    wheelTimeout = setTimeout(() => {
+                        const direction = event.deltaY > 0 ? 1 : -1;
+                        this.goToSlide(Math.min(Math.max(this.currentSlide + direction, 0), this.slides.length - 1));
+                    }, 20);
+                }, { passive: true });
+            }
+
+            setupTouchNav() {
+                window.addEventListener('touchstart', (event) => {
+                    this.touchStartY = event.changedTouches[0].clientY;
+                }, { passive: true });
+
+                window.addEventListener('touchend', (event) => {
+                    const deltaY = this.touchStartY - event.changedTouches[0].clientY;
+                    if (Math.abs(deltaY) < 40) return;
+                    const direction = deltaY > 0 ? 1 : -1;
+                    this.goToSlide(Math.min(Math.max(this.currentSlide + direction, 0), this.slides.length - 1));
+                }, { passive: true });
+            }
+
+            setupProgressBar() {
+                window.addEventListener('scroll', () => {
+                    const maxScroll = document.documentElement.scrollHeight - window.innerHeight;
+                    const ratio = maxScroll > 0 ? window.scrollY / maxScroll : 0;
+                    this.progressBar.style.width = `${Math.min(ratio * 100, 100)}%`;
+                }, { passive: true });
+            }
+
+            updateUI(index) {
+                this.currentSlide = index;
+                const dots = this.navDots.querySelectorAll('.nav-dot');
+                dots.forEach((dot, dotIndex) => {
+                    dot.classList.toggle('active', dotIndex === index);
+                });
+            }
+
+            goToSlide(index) {
+                if (this.isAnimating || !this.slides[index]) return;
+                this.isAnimating = true;
+                this.slides[index].scrollIntoView({ behavior: 'smooth', block: 'start' });
+                window.setTimeout(() => {
+                    this.isAnimating = false;
+                    this.updateUI(index);
+                }, 650);
+            }
+        }
+
+        window.addEventListener('load', () => {
+            new SlidePresentation();
+        });
+    </script>
+</body>
+</html>
+
